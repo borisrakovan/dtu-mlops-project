@@ -19,7 +19,7 @@ def main(input_filepath: Path, output_filepath: Path) -> None:
         with open(output_filepath, 'w') as fout:
             for line in fin:
                 fout.write(line)
-    a = 1
+
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
