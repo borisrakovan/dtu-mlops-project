@@ -24,7 +24,7 @@ make data
 
 Visit the official poetry documentation for more information on how to [manage dependencies using poetry](https://python-poetry.org/docs/basic-usage/).
 
-<!---
+
 ## Pre-commit
 
 This project uses [pre-commit](https://pre-commit.com/) to run checks before committing. To install pre-commit, run
@@ -32,7 +32,6 @@ This project uses [pre-commit](https://pre-commit.com/) to run checks before com
 ```bash
 poetry run pre-commit install
 ```
--->
 
 
 # Project Organization
