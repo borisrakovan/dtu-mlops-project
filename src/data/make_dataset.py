@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import click
 import logging
 from pathlib import Path
@@ -8,12 +7,17 @@ from dotenv import find_dotenv, load_dotenv
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
+def main(input_filepath: Path, output_filepath: Path) -> None:
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
+
+    with open(input_filepath, 'r') as fin:
+        with open(output_filepath, 'w') as fout:
+            for line in fin:
+                fout.write(line)
 
 
 if __name__ == '__main__':
