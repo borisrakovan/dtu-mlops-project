@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: poetry run ruff .
+        language: system
+        files: \.py$
+        pass_filenames: false
