@@ -14,6 +14,7 @@ def main(input_filepath: Path, output_filepath: Path) -> None:
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
 
+    # TODO: add data processing code here
     with open(input_filepath, 'r') as fin:
         with open(output_filepath, 'w') as fout:
             for line in fin:
