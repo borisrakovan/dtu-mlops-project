@@ -13,7 +13,7 @@ This project uses [poetry](https://python-poetry.org/) for dependency management
 To create a virtual environment and install the dependencies, run
 
 ```bash
-poetry install
+poetry install --no-root
 ```
 
 You can verify that the installation was successful by running
