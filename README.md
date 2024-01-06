@@ -1,7 +1,18 @@
 dtu_mlops_project
 ==============================
 
-Coursework for the Machine Learning Operations class at DTU
+Project repository of Group MLOps66 for course Machine Learning Operations @ DTU ([course website](https://skaftenicki.github.io/dtu_mlops/)). Group MLOps66 consists of Riccardo Miccini, Boris Rakovan, and Berend Schuit.
+
+# Project description
+
+1. **Project goal:**
+The aim of this project is to build a DL pipeline that can classify audio data, by internally first converting it to spectrograms (similar to 2D image Tensor), and then treating the problem as an image classification task. The project will be based on the labeled audio data provided in the paper [Warden 2018](https://paperswithcode.com/paper/speech-commands-a-dataset-for-limited).
+2. **Framework:**
+Torchaudio will be used for loading the dataset, pre-processing and data augmentation. Subsequently, torchvision will be used to build a DL model to classify the 2D-Tensor spectrograms. As PyTorch third-party package, we will use [pytorch-image-models](https://github.com/huggingface/pytorch-image-models#models). A possible extended scope is to introduce noise in the torchaudio pre-processing pipeline using the third-party package [audiomentations](https://github.com/iver56/audiomentations) or possibly [torch-audiomentations](https://github.com/asteroid-team/torch-audiomentations).
+3. **Data used:**
+The dataset presented in the Warden 2018 paper is available as a [PyTorch standard dataset](https://pytorch.org/audio/main/generated/torchaudio.datasets.SPEECHCOMMANDS.html) in PyTorch audio.
+4. **Deep learning model:**
+Our aim is to design a DL model that is pre-trained on visual imagery data (e.g. ImageNet, COCO), which will then be finetuned on the described audio data.
 
 
 # Setup
