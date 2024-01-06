@@ -1,4 +1,8 @@
-.PHONY: lint data train
+.PHONY: lint data train build-image-train
+
+
+build-image-train:
+	docker build -t train:latest -f docker/train.dockerfile .
 
 lint:
 	poetry run ruff .
@@ -8,3 +12,6 @@ data:
 
 train:
 	poetry run python src/models/train_model.py
+
+train-docker:
+	docker run -it --rm train:latest
