@@ -1,11 +1,10 @@
-.PHONY: lint data
+.PHONY: lint data train
 
 lint:
-	@echo "Running lint"
-	@poetry run ruff .
-	@echo "Lint complete"
+	poetry run ruff .
 
 data:
-	@echo "Running data processing"
-	@echo 'test' >> data/raw/test.txt && poetry run python src/data/make_dataset.py data/raw/test.txt data/processed/test.txt
-	@echo "Data processing complete"
+	echo 'test' >> data/raw/test.txt && poetry run python src/data/make_dataset.py data/raw/test.txt data/processed/test.txt
+
+train:
+	poetry run python src/models/train_model.py
