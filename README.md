@@ -19,29 +19,31 @@ Our aim is to design a DL model that is pre-trained on visual imagery data (e.g.
 
 ## Poetry
 
-This project uses [poetry](https://python-poetry.org/) for dependency management. To install poetry, follow the instructions on the [poetry website](https://python-poetry.org/docs/#installation).
+This project uses [conda](https://docs.conda.io/en/latest/) and [pip](https://pip.pypa.io/en/stable/) for package management.
+
+```bash
 
 To create a virtual environment and install the dependencies, run
 
 ```bash
-poetry install --no-root
+$ conda create -n dtu_mlops_project python=3.11
+$ conda activate dtu_mlops_project
+$ pip install -r requirements.txt
+$ pip install -r requirements_dev.txt
 ```
 
 You can verify that the installation was successful by running
 
 ```bash
-make data
+$ make train
 ```
-
-Visit the official poetry documentation for more information on how to [manage dependencies using poetry](https://python-poetry.org/docs/basic-usage/).
-
 
 ## Pre-commit
 
 This project uses [pre-commit](https://pre-commit.com/) to run checks before committing. To install pre-commit, run
 
 ```bash
-poetry run pre-commit install
+$ pre-commit install
 ```
 
 
@@ -63,8 +65,7 @@ poetry run pre-commit install
     ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
     │   └── figures        <- Generated graphics and figures to be used in reporting
     │
-    ├── pyproject.toml     <- Main configuration file for poetry
-    ├── poetry.lock        <- Poetry lock file
+    ├── pyproject.toml     <- Main project file
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
     │   │
