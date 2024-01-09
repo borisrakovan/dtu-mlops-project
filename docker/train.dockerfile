@@ -8,22 +8,15 @@ RUN apt update && \
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-ENV PATH="$POETRY_HOME/bin:$VENV_PATH/bin:$PATH"
-
-# Install Poetry
-RUN pip install poetry
-
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the project files (pyproject.toml and poetry.lock) into the working directory
-COPY pyproject.toml poetry.lock ./
-
-# Install project dependencies
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-root --no-interaction --no-ansi
-
-COPY src/ /usr/src/app/src/
+COPY requirements.txt /usr/src/app/requirements.txt
+COPY pyproject.toml /usr/src/app/pyproject.toml
+COPY dtu_mlops_project /usr/src/app/dtu_mlops_project
 COPY data/ /usr/src/app/data/
 
-ENTRYPOINT ["python", "src/models/train_model.py"]
+RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
+
+ENTRYPOINT ["python", "-u", "dtu_mlops_project/models/train_model.py"]

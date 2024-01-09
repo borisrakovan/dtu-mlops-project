@@ -1,69 +1,29 @@
-[tool.poetry]
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
 name = "dtu-mlops-project"
 version = "0.1.0"
 description = "Coursework for Machine Learning Operations class at DTU"
-authors = ["Boris Rakovan <b.rakovan@gmail.com>"]
+authors = [
+    { name = "Boris Rakovan", email = "b.rakovan@gmail.com"},
+    { name = "Berend Schuit" },
+    { name = "Riccardo Miccini" }
+]
+license = { file = "LICENSE" }
 readme = "README.md"
-packages = [{include = "dtu_mlops_project"}]
+requires-python = ">=3.11"
+dynamic = ["dependencies", "optional-dependencies"]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-requests = "^2.31.0"
-python-dotenv = "^1.0.0"
-click = "^8.1.7"
-pydantic = "^2.5.3"
+[tool.setuptools]
+packages = ["dtu_mlops_project"]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.4"
-ruff = "^0.1.11"
-pre-commit = "^3.6.0"
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.dynamic.optional-dependencies]
+dev = {file = ['requirements_dev.txt']}
 
 [tool.ruff]
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".git",
-    ".mypy_cache",
-    ".pytype",
-    ".ruff_cache",
-    ".venv",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
-]
-
 line-length = 120
-indent-width = 4
-
-# Assume Python 3.11
-target-version = "py311"
-
-[tool.ruff.lint]
-# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
-select = ["E4", "E7", "E9", "F"]
-ignore = []
-
-# Allow fix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
-[tool.ruff.format]
-# Like Black, use double quotes for strings.
-quote-style = "double"
-
-# Like Black, indent with spaces, rather than tabs.
-indent-style = "space"
-
-# Like Black, respect magic trailing commas.
-skip-magic-trailing-comma = false
-
-# Like Black, automatically detect the appropriate line ending.
-line-ending = "auto"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
