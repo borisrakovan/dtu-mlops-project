@@ -21,3 +21,10 @@ train:
 
 train-docker:
 	docker run -it --rm train:latest
+
+make test:
+	pytest tests/
+
+make test-coverage:
+	coverage run -m pytest tests/
+	coverage report
