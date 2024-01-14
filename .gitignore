@@ -90,3 +90,5 @@ target/
 
 # Ruff cache
 .ruff_cache/
+
+junit/
