@@ -26,4 +26,4 @@ make test:
 	pytest tests/
 
 make test-coverage:
-	pytest --cov-config=.coveragerc --cov=dtu_mlops_project tests/ --cov-report=html
+	pytest tests/ --cov-config=.coveragerc --cov=dtu_mlops_project --cov-report=xml --cov-report=html
