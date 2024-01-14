@@ -23,8 +23,7 @@ jobs:
         run: ruff --output-format=github .
 
       - name: Run tests
-        run: pytest tests/ --cov-config=.coveragerc --cov=dtu_mlops_project --cov-report=xml --cov-report=html \
-             --junitxml=junit/test-results-3.11.xml
+        run: pytest tests/ --cov-config=.coveragerc --cov=dtu_mlops_project --cov-report=xml --cov-report=html --junitxml=junit/test-results-3.11.xml
 
       - name: Upload test results
         uses: actions/upload-artifact@v3
