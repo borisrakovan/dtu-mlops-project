@@ -47,7 +47,6 @@ def main(output_filepath: Path) -> None:
     files_list = list_files_from_zenodo(record_id)
     files_list = sorted(files_list, key=lambda x: x[2])
     files_list = [f for f in files_list if '16k' in f[0]]
-    files_list = files_list[:2]  # TODO remove
 
     zip_subfolder = Path('DEMAND/zips')
     logger.info(f"Downloading {len(files_list)} files")
