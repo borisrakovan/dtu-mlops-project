@@ -1,6 +1,6 @@
 import torchvision
 from lightning import LightningModule
-from torch import optim
+from torch import optim, nn
 
 
 class SpeechSpectrogramsTransferLearning(LightningModule):
@@ -8,6 +8,10 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
         super().__init__()
         self.learning_rate = learning_rate
         self.resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V2)
+
+        # Monkey patched the number of channels.
+        self.resnet50.conv1 = nn.Conv2d(1, self.resnet50.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
+
 
     def forward(self, x):
         x = self.resnet50(x)
