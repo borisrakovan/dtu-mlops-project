@@ -1,0 +1,2 @@
+_target_: dtu_mlops_project.models.model.SpeechSpectrogramsTransferLearning
+learning_rate: 1e-3
