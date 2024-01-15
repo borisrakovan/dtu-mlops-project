@@ -1,8 +1,7 @@
 # @package _global_
 
 defaults:
-  - datamodule: speechcmd_train
-  - datamodule@datamodule_test:  speechcmd_test
+  - datamodule: speechcmd
   - model: resnet50
   - trainer: default
   - _self_
