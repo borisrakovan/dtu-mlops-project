@@ -4,14 +4,30 @@ from torch import optim, nn
 
 
 class SpeechSpectrogramsTransferLearning(LightningModule):
-    def __init__(self, learning_rate):
+    def __init__(self, learning_rate, pretrained_weights):
         super().__init__()
         self.learning_rate = learning_rate
-        self.resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V2)
+
+        if pretrained_weights == 'IMAGENET1K_V2':
+            self.resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V2)
+        elif pretrained_weights == 'IMAGENET1K_V1':
+            self.resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
+        else:
+            self.resnet50 = torchvision.models.resnet50(weights=None)
+
+
+
 
         # Monkey patched the number of channels.
-        self.resnet50.conv1 = nn.Conv2d(1, self.resnet50.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
+        # self.resnet50.conv1 = nn.Conv2d(1, self.resnet50.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
 
+        self.resnet50.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        # self.resnet50.inplanes is overwritten within the torchvision resnet implementation deeper in the model.
+        # that's why placing it back here in conv1 after the model has been initialized causes a shape issue.
+        # We solved that here by passing the initial startvalue of self.resnet50.inplanes when redefining self.resnet50.conv1
+        # to have only 1 channel.
+
+        self.criterium = nn.CrossEntropyLoss()
 
     def forward(self, x):
         x = self.resnet50(x)
