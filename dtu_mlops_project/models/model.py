@@ -20,8 +20,9 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
 
         # Monkey patched the number of channels.
         # self.resnet50.conv1 = nn.Conv2d(1, self.resnet50.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
-
+        old_conv1_weights = self.resnet50.conv1.weight
         self.resnet50.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.resnet50.conv1.weight = nn.Parameter(old_conv1_weights.mean(dim=1, keepdim=True))
         # self.resnet50.inplanes is overwritten within the torchvision resnet implementation deeper in the model.
         # that's why placing it back here in conv1 after the model has been initialized causes a shape issue.
         # We solved that here by passing the initial startvalue of self.resnet50.inplanes when redefining self.resnet50.conv1

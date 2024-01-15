@@ -4,8 +4,11 @@ defaults:
   - datamodule: speechcmd
   - model: resnet50
   - trainer: default
+  - logger: wandb
   - _self_
 
+run_name: null
+project_name: dtu_mlops_project
 seed: 42
 ckpt_path: null
 test: true

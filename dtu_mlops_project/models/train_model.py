@@ -25,9 +25,9 @@ def train_model(cfg):
     # callbacks = instantiate_callbacks(cfg.get("callbacks"))
     callbacks = []
 
-    # logger.info("Instantiating loggers...")
-    # pl_logger = instantiate_loggers(cfg.get("logger"))
-    pl_logger = None
+    logger.info(f"Instantiating logger <{cfg.logger._target_}>")
+    pl_logger = hydra.utils.instantiate(cfg.logger)
+
 
     logger.info(f"Instantiating trainer <{cfg.trainer._target_}>")
     trainer = hydra.utils.instantiate(cfg.trainer, callbacks=callbacks, logger=pl_logger)
