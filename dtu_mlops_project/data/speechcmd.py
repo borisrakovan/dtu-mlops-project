@@ -41,7 +41,9 @@ class SpeechCommands(Dataset):
 
     def collate_fn(self, batch):
         tensors, targets = zip(*batch)
+        tensors = [t.squeeze(0).T for t in tensors]
         tensors = torch.nn.utils.rnn.pad_sequence(tensors, batch_first=True, padding_value=0.)
+        tensors = tensors.unsqueeze(1).permute(0, 1, 3, 2)
         targets = torch.tensor(targets)
         return tensors, targets
 
@@ -65,10 +67,25 @@ class SpeechCommandsDataModule(LightningDataModule):
             self.speechcmd_test = SpeechCommands(self.data_dir, subset="testing", preproc=self.test_transforms, **self.dataset_kwargs)
 
     def train_dataloader(self):
-        return DataLoader(self.speechcmd_train, batch_size=self.batch_size, shuffle=True, num_workers=self.n_workers)
+        return DataLoader(
+            self.speechcmd_train,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=self.n_workers,
+            collate_fn=self.speechcmd_train.collate_fn)
 
     def val_dataloader(self):
-        return DataLoader(self.speechcmd_val, batch_size=self.batch_size, shuffle=False, num_workers=self.n_workers)
+        return DataLoader(
+            self.speechcmd_val,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.n_workers,
+            collate_fn=self.speechcmd_val.collate_fn)
 
     def test_dataloader(self):
-        return DataLoader(self.speechcmd_test, batch_size=self.batch_size, shuffle=False, num_workers=self.n_workers)
+        return DataLoader(
+            self.speechcmd_test,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=self.n_workers,
+            collate_fn=self.speechcmd_test.collate_fn)
