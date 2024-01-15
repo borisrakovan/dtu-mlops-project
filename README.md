@@ -17,7 +17,7 @@ Our aim is to design a DL model that is pre-trained on visual imagery data (e.g.
 
 # Setup
 
-## Poetry
+## conda
 
 This project uses [conda](https://docs.conda.io/en/latest/) and [pip](https://pip.pypa.io/en/stable/) for package management.
 
