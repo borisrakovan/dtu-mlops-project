@@ -72,7 +72,9 @@ class SpeechCommandsDataModule(LightningDataModule):
             batch_size=self.batch_size,
             shuffle=True,
             num_workers=self.n_workers,
-            collate_fn=self.speechcmd_train.collate_fn)
+            collate_fn=self.speechcmd_train.collate_fn,
+            persistent_workers=True
+        )
 
     def val_dataloader(self):
         return DataLoader(
@@ -80,7 +82,9 @@ class SpeechCommandsDataModule(LightningDataModule):
             batch_size=self.batch_size,
             shuffle=False,
             num_workers=self.n_workers,
-            collate_fn=self.speechcmd_val.collate_fn)
+            collate_fn=self.speechcmd_val.collate_fn,
+            persistent_workers=True
+        )
 
     def test_dataloader(self):
         return DataLoader(
@@ -88,4 +92,6 @@ class SpeechCommandsDataModule(LightningDataModule):
             batch_size=self.batch_size,
             shuffle=False,
             num_workers=self.n_workers,
-            collate_fn=self.speechcmd_test.collate_fn)
+            collate_fn=self.speechcmd_test.collate_fn,
+            persistent_workers=True
+        )
