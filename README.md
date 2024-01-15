@@ -30,6 +30,7 @@ $ conda create -n dtu_mlops_project python=3.11
 $ conda activate dtu_mlops_project
 $ pip install -r requirements.txt
 $ pip install -r requirements_dev.txt
+$ pip install -e .
 ```
 
 You can verify that the installation was successful by running
@@ -66,15 +67,14 @@ $ pre-commit install
     │   └── figures        <- Generated graphics and figures to be used in reporting
     │
     ├── pyproject.toml     <- Main project file
-    ├── src                <- Source code for use in this project.
-    │   ├── __init__.py    <- Makes src a Python module
+    ├── dtu_mlops_project  <- Source code for use in this project.
+    │   ├── __init__.py    <- Makes the directory a Python module
     │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
+    │   ├── data                 <- Data-related code
+    │   │   ├── make_dataset.py  <- Scripts to download or generate data
+    │   │   ├── transforms.py    <- Pytorch modules for data augmentation/feature extraction
+    │   │   └── speechcmds.py    <- Pytorch dataset and class
+=    │   │
     │   ├── models         <- Scripts to train models and then use trained models to make
     │   │   │                 predictions
     │   │   ├── predict_model.py

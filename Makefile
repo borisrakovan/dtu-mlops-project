@@ -14,7 +14,7 @@ data:
 	@echo "Downloading datasets"
 	@source $(shell conda info --base)/etc/profile.d/conda.sh ;\
 	conda activate $(CONDA_ENV) ;\
-	python src/data/download_dataset.py data/raw/
+	python dtu_mlops_project/data/download_dataset.py data/raw/
 
 train:
 	python dtu_mlops_project/models/train_model.py

@@ -1,0 +1,22 @@
+# @package _global_
+
+defaults:
+  - datamodule: speechcmd_train
+  - datamodule@datamodule_test:  speechcmd_test
+  - model: resnet50
+  - trainer: default
+  - _self_
+
+seed: 42
+ckpt_path: './checkpoints'
+test: true
+
+
+hydra:
+  job:
+    chdir: true
+  run:
+    dir: ./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: ./outputs/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
