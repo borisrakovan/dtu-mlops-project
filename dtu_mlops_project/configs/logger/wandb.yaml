@@ -1,0 +1,14 @@
+_target_: lightning.pytorch.loggers.WandbLogger
+
+name: ${run_name}
+save_dir: '.'
+version: null
+offline: False
+dir: null
+id: null
+anonymous: False
+project: ${project_name}
+log_model: False
+experiment: null
+prefix: ''
+checkpoint_name: null
