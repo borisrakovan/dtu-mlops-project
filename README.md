@@ -28,9 +28,18 @@ To create a virtual environment and install the dependencies, run
 ```bash
 $ conda create -n dtu_mlops_project python=3.11
 $ conda activate dtu_mlops_project
+$ conda install -c conda-forge 'ffmpeg<7'
 $ pip install -r requirements.txt
 $ pip install -r requirements_dev.txt
 $ pip install -e .
+```
+
+Furthermore, a `.env` need to be created in the root directory of the project, based on `.env.example` (make sure to change the values of the variables):
+
+```bash
+cp .env.example .env
+# to automatically specify the data path:
+echo "DATA_PATH=$(pwd)/data/raw" > .env
 ```
 
 You can verify that the installation was successful by running

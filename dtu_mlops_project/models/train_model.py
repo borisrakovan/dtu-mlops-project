@@ -1,5 +1,6 @@
 import os
 import logging
+import dotenv
 import hydra
 import lightning as L
 
@@ -56,4 +57,5 @@ def train_model(cfg):
 
 
 if __name__ == "__main__":
+    dotenv.load_dotenv(override=True)
     train_model()
