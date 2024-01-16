@@ -1,37 +1,48 @@
+import logging
 import torchvision
 from lightning import LightningModule
 from torch import optim, nn
 
+logger = logging.getLogger(__name__)
+
 
 class SpeechSpectrogramsTransferLearning(LightningModule):
-    def __init__(self, learning_rate, pretrained_weights):
+    VALID_RESNET_VERSIONS = ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152']
+    RESNET_WEIGHTS = {
+        'resnet18': torchvision.models.ResNet18_Weights,
+        'resnet34': torchvision.models.ResNet34_Weights,
+        'resnet50': torchvision.models.ResNet50_Weights,
+        'resnet101': torchvision.models.ResNet101_Weights,
+        'resnet152': torchvision.models.ResNet152_Weights,
+    }
+    def __init__(self, learning_rate, resnet_version, pretrained_weights):
         super().__init__()
         self.learning_rate = learning_rate
-
-        if pretrained_weights == 'IMAGENET1K_V2':
-            self.resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V2)
-        elif pretrained_weights == 'IMAGENET1K_V1':
-            self.resnet50 = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
+        # pick resnet version
+        if resnet_version not in self.VALID_RESNET_VERSIONS:
+            raise ValueError(f'Invalid resnet_version: {resnet_version}. Valid resnet versions are: {self.VALID_RESNET_VERSIONS}')
+        self.resnet_version = resnet_version
+        # pick pretrained weights
+        if pretrained_weights is not None:
+            self.pretrained_weights = self.RESNET_WEIGHTS[resnet_version][pretrained_weights]
         else:
-            self.resnet50 = torchvision.models.resnet50(weights=None)
-
-
-
-
+            self.pretrained_weights = None
+        # init resnet
+        logger.info(f'Initializing resnet {resnet_version} with weights {pretrained_weights}')
+        self.resnet = getattr(torchvision.models, resnet_version)(weights=self.pretrained_weights)
         # Monkey patched the number of channels.
-        # self.resnet50.conv1 = nn.Conv2d(1, self.resnet50.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
-        old_conv1_weights = self.resnet50.conv1.weight
-        self.resnet50.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
-        self.resnet50.conv1.weight = nn.Parameter(old_conv1_weights.mean(dim=1, keepdim=True))
-        # self.resnet50.inplanes is overwritten within the torchvision resnet implementation deeper in the model.
+        # self.resnet.conv1 = nn.Conv2d(1, self.resnet.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
+        old_conv1_weights = self.resnet.conv1.weight
+        self.resnet.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.resnet.conv1.weight = nn.Parameter(old_conv1_weights.mean(dim=1, keepdim=True))
+        # self.resnet.inplanes is overwritten within the torchvision resnet implementation deeper in the model.
         # that's why placing it back here in conv1 after the model has been initialized causes a shape issue.
-        # We solved that here by passing the initial startvalue of self.resnet50.inplanes when redefining self.resnet50.conv1
+        # We solved that here by passing the initial startvalue of self.resnet.inplanes when redefining self.resnet.conv1
         # to have only 1 channel.
-
         self.criterium = nn.CrossEntropyLoss()
 
     def forward(self, x):
-        x = self.resnet50(x)
+        x = self.resnet(x)
         return x
 
     def training_step(self, batch, batch_idx):
