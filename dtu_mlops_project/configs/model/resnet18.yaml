@@ -1,5 +1,5 @@
 _target_: dtu_mlops_project.models.model.SpeechSpectrogramsTransferLearning
 learning_rate: 1e-3
-resnet_version: "resnet34"
+resnet_version: "resnet18"
 pretrained_weights: "IMAGENET1K_V1"
 # pretrained_weights: null
