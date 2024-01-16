@@ -93,3 +93,5 @@ target/
 
 junit/
 outputs/
+wandb/
+wandb_tests/
