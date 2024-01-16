@@ -2,7 +2,7 @@ SHELL=/bin/bash
 CONDA_ENV=dtu_mlops_project
 
 
-.PHONY: lint data train build-image-train
+.PHONY: lint data train build-image-train train-docker test test-coverage
 
 build-image-train:
 	docker build -t train:latest -f docker/train.dockerfile .
@@ -21,3 +21,9 @@ train:
 
 train-docker:
 	docker run -it --rm train:latest
+
+make test:
+	pytest tests/
+
+make test-coverage:
+	pytest --cov-config=.coveragerc --cov=dtu_mlops_project tests/ --cov-report=html
