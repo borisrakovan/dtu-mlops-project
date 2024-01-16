@@ -47,6 +47,7 @@ def main(output_filepath: Path) -> None:
     files_list = list_files_from_zenodo(record_id)
     files_list = sorted(files_list, key=lambda x: x[2])
     files_list = [f for f in files_list if '16k' in f[0]]
+    files_list = files_list[:2]  # limit downloads for speed, TODO remove
 
     zip_subfolder = Path('DEMAND/zips')
     logger.info(f"Downloading {len(files_list)} files")
@@ -66,6 +67,16 @@ def main(output_filepath: Path) -> None:
                 logger.info(f"Unzipping {zip_path} to {path_to_extract}")
                 path_to_extract.mkdir(parents=True, exist_ok=True)
                 zip_ref.extractall(path_to_extract)
+
+    logger.info('Deleting zip files')
+    # delete demand zip files
+    for zip_path in paths_to_unzip:
+        zip_path.unlink()
+    (output_filepath / zip_subfolder).absolute().rmdir()
+    # delete speechcmd zip file
+    speechcmd_archive = [a for a in (output_filepath / speechcmd_subfolder).iterdir() if a.suffix == '.gz']
+    if len(speechcmd_archive) == 1:
+        speechcmd_archive[0].unlink()
 
 
 
