@@ -1,13 +1,9 @@
-import logging
 import torch
 import torchaudio
 import pandas as pd
 from omegaconf import ListConfig
 from torch.utils.data import Dataset, DataLoader
 from lightning import LightningDataModule
-
-
-logger = logging.getLogger(__name__)
 
 
 class SpeechCommands(Dataset):
