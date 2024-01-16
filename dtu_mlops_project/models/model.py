@@ -40,6 +40,13 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
         # that's why placing it back here in conv1 after the model has been initialized causes a shape issue.
         # We solved that here by passing the initial startvalue of self.resnet.inplanes when redefining self.resnet.conv1
         # to have only 1 channel.
+
+        num_classes = 35 # for SpeechCommands, instead of 1000 for ImageNet.
+        self.resnet.fc = nn.Linear(self.resnet.fc.in_features, num_classes)
+
+
+
+
         self.criterium = nn.CrossEntropyLoss()
 
     def forward(self, x: Tensor) -> Tensor:

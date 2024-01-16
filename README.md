@@ -39,7 +39,7 @@ Furthermore, a `.env` need to be created in the root directory of the project, b
 ```bash
 cp .env.example .env
 # to automatically specify the data path:
-echo "DATA_PATH=$(pwd)/data/raw" > .env
+echo "DATA_PATH=$(pwd)/data/raw" >> .env
 ```
 
 You can verify that the installation was successful by running
