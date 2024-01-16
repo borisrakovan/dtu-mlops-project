@@ -2,7 +2,7 @@ SHELL=/bin/bash
 CONDA_ENV=dtu_mlops_project
 
 
-.PHONY: lint data train build-image-train train-docker test test-coverage
+.PHONY: lint setup-data pull-data train build-image-train train-docker test test-coverage
 
 build-image-train:
 	docker build -t train:latest -f docker/train.dockerfile .
@@ -10,11 +10,18 @@ build-image-train:
 lint:
 	ruff .
 
-data:
+setup-data:
 	@echo "Downloading datasets"
 	@source $(shell conda info --base)/etc/profile.d/conda.sh ;\
 	conda activate $(CONDA_ENV) ;\
-	python dtu_mlops_project/data/download_dataset.py data/raw/
+	python dtu_mlops_project/data/download_dataset.py data/raw
+
+
+pull-data:
+	@echo "Pulling data from DVC"
+	@source $(shell conda info --base)/etc/profile.d/conda.sh ;\
+	conda activate $(CONDA_ENV) ;\
+	dvc pull
 
 train:
 	python dtu_mlops_project/models/train_model.py

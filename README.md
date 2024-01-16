@@ -17,8 +17,7 @@ Our aim is to design a DL model that is pre-trained on visual imagery data (e.g.
 
 # Setup
 
-## conda
-
+## Conda
 This project uses [conda](https://docs.conda.io/en/latest/) and [pip](https://pip.pypa.io/en/stable/) for package management.
 
 ```bash
@@ -34,7 +33,8 @@ $ pip install -r requirements_dev.txt
 $ pip install -e .
 ```
 
-Furthermore, a `.env` need to be created in the root directory of the project, based on `.env.example` (make sure to change the values of the variables):
+## Environment variables
+An `.env` file needs to be created in the root directory of the project, based on `.env.example` (make sure to change the values of the variables):
 
 ```bash
 cp .env.example .env
@@ -49,11 +49,24 @@ $ make train
 ```
 
 ## Pre-commit
-
 This project uses [pre-commit](https://pre-commit.com/) to run checks before committing. To install pre-commit, run
 
 ```bash
 $ pre-commit install
+```
+
+## Dataset
+All the necessary data is stored in the `data` directory, using [DVC](https://dvc.org/) for version control.
+To retrieve the data from DVC, run:
+
+```bash
+$ make pull-data
+```
+
+To perform the initial dataset setup (this only needs to be run the first time), or if you don't have access to the remote storage backend, run:
+
+```bash
+$ make setup-data
 ```
 
 
@@ -83,7 +96,7 @@ $ pre-commit install
     │   │   ├── make_dataset.py  <- Scripts to download or generate data
     │   │   ├── transforms.py    <- Pytorch modules for data augmentation/feature extraction
     │   │   └── speechcmds.py    <- Pytorch dataset and class
-=    │   │
+    │   │
     │   ├── models         <- Scripts to train models and then use trained models to make
     │   │   │                 predictions
     │   │   ├── predict_model.py
