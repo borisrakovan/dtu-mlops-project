@@ -1,21 +1,22 @@
 import logging
 import torchvision
 from lightning import LightningModule
-from torch import optim, nn
+from torch import Tensor, optim, nn
+from typing import Any, List, Dict, Tuple, Union
 
 logger = logging.getLogger(__name__)
 
 
 class SpeechSpectrogramsTransferLearning(LightningModule):
-    VALID_RESNET_VERSIONS = ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152']
-    RESNET_WEIGHTS = {
+    VALID_RESNET_VERSIONS: List[str] = ['resnet18', 'resnet34', 'resnet50', 'resnet101', 'resnet152']
+    RESNET_WEIGHTS: Dict[str, Any] = {
         'resnet18': torchvision.models.ResNet18_Weights,
         'resnet34': torchvision.models.ResNet34_Weights,
         'resnet50': torchvision.models.ResNet50_Weights,
         'resnet101': torchvision.models.ResNet101_Weights,
         'resnet152': torchvision.models.ResNet152_Weights,
     }
-    def __init__(self, learning_rate, resnet_version, pretrained_weights):
+    def __init__(self, learning_rate: float, resnet_version: str, pretrained_weights: Union[str, None]):
         super().__init__()
         self.learning_rate = learning_rate
         # pick resnet version
@@ -41,11 +42,11 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
         # to have only 1 channel.
         self.criterium = nn.CrossEntropyLoss()
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
         x = self.resnet(x)
         return x
 
-    def training_step(self, batch, batch_idx):
+    def training_step(self, batch: Tuple[Tensor, Tensor], batch_idx: int) -> Tensor:
         data, target = batch
         preds = self(data)
         loss = self.criterium(preds, target)
@@ -54,7 +55,7 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
         self.log('train_acc', acc)
         return loss
 
-    def validation_step(self, batch, batch_idx):
+    def validation_step(self, batch: Tuple[Tensor, Tensor], batch_idx: int) -> Tensor:
         data, target = batch
         preds = self(data)
         loss = self.criterium(preds, target)
@@ -63,7 +64,7 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
         self.log('val_acc', acc)
         return loss
 
-    def test_step(self, batch, batch_idx):
+    def test_step(self, batch: Tuple[Tensor, Tensor], batch_idx: int) -> Tensor:
         data, target = batch
         preds = self(data)
         loss = self.criterium(preds, target)
@@ -72,5 +73,5 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
         self.log('test_acc', acc)
         return loss
 
-    def configure_optimizers(self):
+    def configure_optimizers(self) -> optim.Optimizer:
         return optim.Adam(self.parameters(), lr=self.learning_rate)
