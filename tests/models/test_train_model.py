@@ -4,7 +4,7 @@ from dtu_mlops_project.models.train_model import train_model
 
 def test_train_model():
     dotenv.load_dotenv(override=True)
-    with initialize(version_base="1.3", config_path="../../dtu_mlops_project/configs"):
+    with initialize(version_base="1.3", config_path="../../configs"):
         # config is relative to a module
         cfg = compose(config_name="train.yaml", overrides=[
             "trainer.overfit_batches=4",

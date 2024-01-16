@@ -5,7 +5,7 @@ import hydra
 import lightning as L
 
 
-@hydra.main(version_base="1.3", config_path="../configs", config_name="train.yaml")
+@hydra.main(version_base="1.3", config_path="../../configs", config_name="train.yaml")
 def train_model(cfg):
     logger = logging.getLogger(__name__)
     cwd = os.path.abspath(os.getcwd())
