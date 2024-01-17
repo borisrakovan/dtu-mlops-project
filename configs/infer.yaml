@@ -3,20 +3,17 @@
 defaults:
   - datamodule: speechcmd
   - model: resnet50
-  - trainer: default
-  - logger: wandb
+  - predict: forward
   - _self_
 
-run_name: null
-project_name: dtu_mlops_project
 seed: 42
-ckpt_path: null
-test: true
-
+idx_to_class: "data/processed/class_idx_export.npy"
+api_port: 8001
+ui_port: 8002
 
 hydra:
   job:
-    chdir: true
+    chdir: false
   run:
     dir: ./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
   sweep:
