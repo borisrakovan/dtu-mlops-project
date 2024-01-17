@@ -75,7 +75,9 @@ target/
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 
-/playground/
+playground/
+
+data/processed/
 
 .gc-credentials.env
 
