@@ -52,3 +52,8 @@ async def predict_audio(data: UploadFile = File(...)):
         "logits": {k: v for k, v in zip(idx_to_class, y_hat)}
     }
     return response
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host='0.0.0.0', port=api_configs.api_port)
