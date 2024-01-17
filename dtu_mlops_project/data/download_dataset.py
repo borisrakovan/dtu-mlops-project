@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import click
 import logging
 import zipfile
@@ -5,6 +8,8 @@ import requests
 import torchaudio
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+
+logger = logging.getLogger(__name__)
 
 
 def list_files_from_zenodo(record_id):
@@ -34,7 +39,8 @@ def main(output_filepath: Path) -> None:
     """ Download the required datasets from the web (SPEECHCOMMANDS and DEMAND)
         if not already downloaded and save them to the specified output_filepath.
     """
-    logger = logging.getLogger(__name__)
+    output_filepath = Path(output_filepath)
+
     logger.info('downloading SPEECHCOMMANDS')
     speechcmd_subfolder = Path('SPEECHCMD')
     path_to_save = output_filepath / speechcmd_subfolder
@@ -47,7 +53,6 @@ def main(output_filepath: Path) -> None:
     files_list = list_files_from_zenodo(record_id)
     files_list = sorted(files_list, key=lambda x: x[2])
     files_list = [f for f in files_list if '16k' in f[0]]
-    files_list = files_list[:2]  # limit downloads for speed, TODO remove
 
     zip_subfolder = Path('DEMAND/zips')
     logger.info(f"Downloading {len(files_list)} files")
@@ -78,6 +83,21 @@ def main(output_filepath: Path) -> None:
     if len(speechcmd_archive) == 1:
         speechcmd_archive[0].unlink()
 
+    # Zip the DEMAND and SPEECHCMD directories into a single file (this file will be versioned using DVC)
+    logger.info('Zipping DEMAND and SPEECHCMD directories')
+    with zipfile.ZipFile(output_filepath / 'data.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for directory in [output_filepath / 'DEMAND', output_filepath / 'SPEECHCMD']:
+            for root, dirs, files in os.walk(directory):
+                for file in files:
+                    zipf.write(
+                        os.path.join(root, file),
+                        os.path.relpath(os.path.join(root, file), os.path.join(directory, '..'))
+                    )
+
+    # Remove the original directories
+    logger.info('Removing original DEMAND and SPEECHCMD directories')
+    shutil.rmtree(output_filepath / 'DEMAND')
+    shutil.rmtree(output_filepath / 'SPEECHCMD')
 
 
 if __name__ == '__main__':
