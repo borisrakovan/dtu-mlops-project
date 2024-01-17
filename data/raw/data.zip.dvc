@@ -3,3 +3,7 @@ outs:
   size: 2500085188
   hash: md5
   path: data.zip
+  cloud:
+    remote_storage:
+      etag: 08e6cf97e9aae483031001
+      version_id: '1705491468511206'

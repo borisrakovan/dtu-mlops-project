@@ -34,12 +34,12 @@ $ pip install -e .
 ```
 
 ## Environment variables
-An `.env` file needs to be created in the root directory of the project, based on `.env.example` (make sure to change the values of the variables):
+An `.env` file needs to be created in the root directory of the project, based on `.example.env` (make sure to change the values of the variables):
 
 ```bash
-cp .env.example .env
+cp .example.env .env
 # to automatically specify the data path:
-echo "DATA_PATH=$(pwd)/data/raw" >> .env
+echo "DATA_PATH=$(pwd)/data/processed" >> .env
 ```
 
 You can verify that the installation was successful by running
@@ -57,13 +57,20 @@ $ pre-commit install
 
 ## Dataset
 All the necessary data is stored in the `data` directory, using [DVC](https://dvc.org/) for version control.
-To retrieve the data from DVC, run:
+To retrieve the data from DVC, you need to have access to the remote storage backend (GSC) using a service account file
+distributed via a secure channel. Once you have the file on your local machine, run
+
+```bash
+cp .gc-credentials.example.env .gc-credentials.env
+```
+
+and manually fill in the path to the service account file in `.gc-credentials.env`. Then, you can run:
 
 ```bash
 $ make pull-data
 ```
 
-To perform the initial dataset setup (this only needs to be run the first time), or if you don't have access to the remote storage backend, run:
+To perform the initial dataset setup (this only needs to be run the first time), run:
 
 ```bash
 $ make setup-data
