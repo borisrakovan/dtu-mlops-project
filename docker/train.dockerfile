@@ -14,12 +14,11 @@ WORKDIR /usr/src/app
 
 COPY requirements.txt /usr/src/app/requirements.txt
 COPY pyproject.toml /usr/src/app/pyproject.toml
-
-RUN pip install -r requirements.txt --no-cache-dir
-RUN pip install . --no-deps --no-cache-dir
-
 COPY dtu_mlops_project /usr/src/app/dtu_mlops_project
 COPY data/ /usr/src/app/data/
 COPY configs/ /usr/src/app/configs/
+
+RUN pip install -r requirements.txt --no-cache-dir
+RUN pip install . --no-deps --no-cache-dir
 
 ENTRYPOINT ["python", "-u", "dtu_mlops_project/models/train_model.py"]
