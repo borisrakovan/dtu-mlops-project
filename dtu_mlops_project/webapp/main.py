@@ -6,10 +6,11 @@ from http import HTTPStatus
 from fastapi import FastAPI
 from fastapi import UploadFile, File
 from fastapi.responses import PlainTextResponse
+from dtu_mlops_project.constants import PROJECT_ROOT
 from dtu_mlops_project.webapp.config import api_configs
 from dtu_mlops_project.models.predict_model import get_ppm_from_config
 
-os.chdir(os.path.abspath("../.."))
+os.chdir(PROJECT_ROOT)
 app = FastAPI()
 ppm = get_ppm_from_config(api_configs)
 idx_to_class = np.load(api_configs.idx_to_class).astype(str)

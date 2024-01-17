@@ -38,8 +38,16 @@ visualize:
 train-docker:
 	docker run -it --rm --env-file .env -v $(shell pwd):/usr/src/app train:latest
 
-make test: venv
+test: venv
 	pytest tests/
 
-make test-coverage: venv
+test-coverage: venv
 	pytest tests/ --cov-config=.coveragerc --cov=dtu_mlops_project --cov-report=xml --cov-report=html
+
+web-api: venv
+	python dtu_mlops_project/webapp/main.py
+
+web-gui: venv
+	python dtu_mlops_project/webapp/gui.py
+
+webapp: venv web-api web-gui

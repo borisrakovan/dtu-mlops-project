@@ -74,6 +74,23 @@ To perform the initial dataset setup (this only needs to be run the first time),
 $ make setup-data
 ```
 
+# Local deployment
+The project can be deployed locally using FastAPI, and features an optional browser-based UI.
+Use any of the following commands:
+
+```bash
+# instantiate backend api server
+$ make web-api
+
+# instantiate browser-based ui
+$ make web-gui
+
+# instantiate both (use -j2 to run in parallel)
+$ make webapp -j2
+```
+
+```
+
 
 # Project Organization
 
