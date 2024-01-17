@@ -22,8 +22,7 @@ setup-data: venv
 
 pull-data: venv
 	@echo "Pulling data from DVC"
-	@export $$(cat .gc-credentials.env | xargs)
-	dvc pull
+	@export $$(cat .gc-credentials.env | xargs) && dvc pull
 	mkdir -p data/processed
 	unzip data/raw/data.zip -d data/processed/
 
