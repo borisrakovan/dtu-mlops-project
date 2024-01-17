@@ -1,6 +1,6 @@
 _target_: dtu_mlops_project.data.speechcmd.SpeechCommandsDataModule
 
-data_dir: ${oc.env:DATA_PATH}/SPEECHCMD
+data_path: data/processed/SPEECHCMD
 batch_size: 32
 n_workers: 6
 classes: null

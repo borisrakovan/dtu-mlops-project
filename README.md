@@ -38,8 +38,6 @@ An `.env` file needs to be created in the root directory of the project, based o
 
 ```bash
 cp .example.env .env
-# to automatically specify the data path:
-echo "DATA_PATH=$(pwd)/data/processed" >> .env
 ```
 
 You can verify that the installation was successful by running
