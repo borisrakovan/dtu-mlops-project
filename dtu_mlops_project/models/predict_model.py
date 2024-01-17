@@ -46,21 +46,20 @@ class PreprocPlusModel(torch.nn.Module):
         }
 
 
+def predict():
+    with hydra.initialize(version_base="1.3", config_path="../../configs"):
+        cfg = hydra.compose(config_name="train.yaml")
 
-
-if __name__ == "__main__":
-
-    path_to_model_checkpoint = "outputs/2024-01-16/20-31-40/dtu_mlops_project/nn38hdgq/checkpoints/epoch=2-step=7956.ckpt"
-    # test_acc = 0.93412
-
-    filename = "/SPEECHCMD/SpeechCommands/speech_commands_v0.02/eight/0a2b400e_nohash_2.wav"
-    path_to_waveform = os.environ["DATA_PATH"]+filename
-
-
-    ppm = PreprocPlusModel(path_to_model_checkpoint)
-    results = ppm.wav_to_yhat(path_to_waveform=path_to_waveform)
-    # print(results["x_preproc"].shape)
+    ppm = PreprocPlusModel(cfg.predict.filepath_model_checkpoint)
+    results = ppm.wav_to_yhat(path_to_waveform=os.environ["DATA_PATH"]+cfg.predict.filepath_dot_wav_audio)
 
     idx_to_class = np.load("data/processed/class_idx_export.npy").astype(str)
     predicted_class = idx_to_class[results["pred"]]
     print(f"predicted_class: {predicted_class}     true class: {results['y_true']}")
+
+    return predicted_class
+
+
+if __name__ == "__main__":
+
+    predict()

@@ -1,6 +1,7 @@
 import os
 
 import dotenv
+import hydra
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -48,10 +49,10 @@ def generate_prediction_figure(path_to_model_checkpoint, path_to_waveform):
 
 
 if __name__ == "__main__":
-    path_to_model_checkpoint = "outputs/2024-01-16/20-31-40/dtu_mlops_project/nn38hdgq/checkpoints/epoch=2-step=7956.ckpt"
-    # test_acc = 0.93412
 
-    filename = "/SPEECHCMD/SpeechCommands/speech_commands_v0.02/eight/0a2b400e_nohash_2.wav"
-    path_to_waveform = os.environ["DATA_PATH"]+filename
+    with hydra.initialize(version_base="1.3", config_path="../../configs"):
+        cfg = hydra.compose(config_name="train.yaml")
 
-    generate_prediction_figure(path_to_model_checkpoint, path_to_waveform)
+    generate_prediction_figure(path_to_model_checkpoint=cfg.predict.filepath_model_checkpoint,
+                                path_to_waveform=os.environ["DATA_PATH"]+cfg.predict.filepath_dot_wav_audio
+    )
