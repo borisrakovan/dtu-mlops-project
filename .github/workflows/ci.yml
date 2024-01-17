@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Add DATA_PATH to .env file
-        run: echo "DATA_PATH=$(pwd)/data/raw" >> .env
+        run: echo "DATA_PATH=$(pwd)/data/processed" >> .env
 
       - name: Install FFMPEG
         run: sudo apt-get install -y ffmpeg

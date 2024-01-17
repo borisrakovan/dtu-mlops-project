@@ -4,33 +4,37 @@ CONDA_ENV=dtu_mlops_project
 
 .PHONY: lint setup-data pull-data train build-image-train train-docker test test-coverage
 
+venv:
+	@echo "Activating conda environment"
+	@source $(shell conda info --base)/etc/profile.d/conda.sh ;\
+	conda activate $(CONDA_ENV)
+
 build-image-train:
 	docker build -t train:latest -f docker/train.dockerfile .
 
-lint:
+lint: venv
 	ruff .
 
-setup-data:
+setup-data: venv
 	@echo "Downloading datasets"
-	@source $(shell conda info --base)/etc/profile.d/conda.sh ;\
-	conda activate $(CONDA_ENV) ;\
 	python dtu_mlops_project/data/download_dataset.py data/raw
 
 
-pull-data:
+pull-data: venv
 	@echo "Pulling data from DVC"
-	@source $(shell conda info --base)/etc/profile.d/conda.sh ;\
-	conda activate $(CONDA_ENV) ;\
+	@export $$(cat .gc-credentials.env | xargs)
 	dvc pull
+	mkdir -p data/processed
+	unzip data/raw/data.zip -d data/processed/
 
-train:
+train: venv
 	python dtu_mlops_project/models/train_model.py
 
 train-docker:
 	docker run -it --rm train:latest
 
-make test:
+make test: venv
 	pytest tests/
 
-make test-coverage:
+make test-coverage: venv
 	pytest tests/ --cov-config=.coveragerc --cov=dtu_mlops_project --cov-report=xml --cov-report=html
