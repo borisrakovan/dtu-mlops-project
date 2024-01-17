@@ -8,11 +8,13 @@ from lightning import LightningDataModule
 from typing import Any, List, Tuple, Union
 from torch import Tensor
 
+from dtu_mlops_project.constants import PROJECT_ROOT
+
 
 class SpeechCommands(Dataset):
     def __init__(self, root: str, subset: str, classes: Union[List[str], int], preproc: nn.Module, **kwargs: Any):
         # load dataset
-        self.dataset = torchaudio.datasets.SPEECHCOMMANDS(root=root, subset=subset, download=True)
+        self.dataset = torchaudio.datasets.SPEECHCOMMANDS(root=root, subset=subset)
         # load metadata into dataframe
         self.df = pd.DataFrame(
             [self.dataset.get_metadata(i) for i in range(len(self.dataset))],
@@ -47,11 +49,10 @@ class SpeechCommands(Dataset):
         return tensors, targets
 
 
-
 class SpeechCommandsDataModule(LightningDataModule):
-    def __init__(self, data_dir: str, batch_size: int, n_workers: int, train_transforms: List[nn.Module], test_transforms: List[nn.Module], **kwargs: Any):
+    def __init__(self, data_path: str, batch_size: int, n_workers: int, train_transforms: List[nn.Module], test_transforms: List[nn.Module], **kwargs: Any):
         super().__init__()
-        self.data_dir = data_dir
+        self.data_path = PROJECT_ROOT / data_path
         self.batch_size = batch_size
         self.n_workers = n_workers
         self.train_transforms = nn.Sequential(*train_transforms)
@@ -60,10 +61,10 @@ class SpeechCommandsDataModule(LightningDataModule):
 
     def setup(self, stage: Union[str, None]) -> None:
         if stage == "fit" or stage is None:
-            self.speechcmd_train = SpeechCommands(self.data_dir, subset="training", preproc=self.train_transforms, **self.dataset_kwargs)
-            self.speechcmd_val = SpeechCommands(self.data_dir, subset="validation", preproc=self.test_transforms, **self.dataset_kwargs)
+            self.speechcmd_train = SpeechCommands(self.data_path, subset="training", preproc=self.train_transforms, **self.dataset_kwargs)
+            self.speechcmd_val = SpeechCommands(self.data_path, subset="validation", preproc=self.test_transforms, **self.dataset_kwargs)
         if stage == "test" or stage is None:
-            self.speechcmd_test = SpeechCommands(self.data_dir, subset="testing", preproc=self.test_transforms, **self.dataset_kwargs)
+            self.speechcmd_test = SpeechCommands(self.data_path, subset="testing", preproc=self.test_transforms, **self.dataset_kwargs)
 
     def train_dataloader(self) -> DataLoader:
         return DataLoader(

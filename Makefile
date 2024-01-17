@@ -31,7 +31,7 @@ train: venv
 	python dtu_mlops_project/models/train_model.py
 
 train-docker:
-	docker run -it --rm train:latest
+	docker run -it --rm --env-file .env -v $(shell pwd):/usr/src/app train:latest
 
 make test: venv
 	pytest tests/
