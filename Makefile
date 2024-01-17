@@ -19,6 +19,12 @@ data:
 train:
 	python dtu_mlops_project/models/train_model.py
 
+predict:
+	python dtu_mlops_project/models/predict_model.py
+
+visualize:
+	python dtu_mlops_project/visualization/visualize.py
+
 train-docker:
 	docker run -it --rm train:latest
 
