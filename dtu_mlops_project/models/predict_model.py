@@ -35,25 +35,27 @@ class PreprocPlusModel(torch.nn.Module):
         }
 
 
-@hydra.main(version_base="1.3", config_path="../../configs", config_name="train.yaml")
+def get_ppm_from_config(cfg):
+    model = hydra.utils.instantiate(cfg.model)
+    preprocessing_list = hydra.utils.instantiate(cfg.datamodule.test_transforms)
+    preprocessing = torch.nn.Sequential(*preprocessing_list)
+    ppm = PreprocPlusModel(model, preprocessing, cfg.predict.filepath_model_checkpoint)
+    return ppm
+
+
+@hydra.main(version_base="1.3", config_path="../../configs", config_name="infer.yaml")
 def predict_model(cfg):
     logger = logging.getLogger(__name__)
-    os.chdir(hydra.utils.get_original_cwd())
     logger.info(f"Working directory: {os.getcwd()}")
 
     # instantiate model+preprocessing module
-    logger.info(f"Instantiating model <{cfg.model._target_}>")
-    model = hydra.utils.instantiate(cfg.model)
-    logger.info("Instantiating preprocessing pipeline")
-    preprocessing_list = hydra.utils.instantiate(cfg.datamodule.test_transforms)  # no frequency masking
-    preprocessing = torch.nn.Sequential(*preprocessing_list)
     logger.info("Instantiating combined model+preprocessing module")
-    ppm = PreprocPlusModel(model, preprocessing, cfg.predict.filepath_model_checkpoint)
+    ppm = get_ppm_from_config(cfg)
 
     # run inference
     path_to_waveform = os.environ["DATA_PATH"] + cfg.predict.filepath_dot_wav_audio
     results = ppm.wav_to_yhat(path_to_waveform=path_to_waveform, read_true_class=True)
-    idx_to_class = np.load("data/processed/class_idx_export.npy").astype(str)
+    idx_to_class = np.load(cfg.idx_to_class).astype(str)
     predicted_class = idx_to_class[results["y_pred"]]
     logger.info(f"predicted_class: {predicted_class}     true class: {results['y_true']}")
     return predicted_class
