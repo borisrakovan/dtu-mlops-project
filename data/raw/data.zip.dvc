@@ -1,0 +1,5 @@
+outs:
+- md5: 2e5e6ed5a7da7ba3715b87e9d0b3837f
+  size: 2500085188
+  hash: md5
+  path: data.zip
