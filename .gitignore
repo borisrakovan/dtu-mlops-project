@@ -77,6 +77,8 @@ target/
 
 # exclude data from source control by default
 /data/
+# include /data/raw/data.zip
+!/data/raw/data.zip.dvc
 
 # Mac OS-specific storage files
 .DS_Store
