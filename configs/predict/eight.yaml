@@ -1,0 +1,2 @@
+filepath_model_checkpoint: outputs/2024-01-16/20-31-40/dtu_mlops_project/nn38hdgq/checkpoints/epoch=2-step=7956.ckpt
+filepath_dot_wav_audio: /SPEECHCMD/SpeechCommands/speech_commands_v0.02/eight/0a2b400e_nohash_2.wav

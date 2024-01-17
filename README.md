@@ -59,7 +59,7 @@ To retrieve the data from DVC, you need to have access to the remote storage bac
 distributed via a secure channel. Once you have the file on your local machine, run
 
 ```bash
-cp .gc-credentials.example.env .gc-credentials.env
+cp .example.gc-credentials.env .gc-credentials.env
 ```
 
 and manually fill in the path to the service account file in `.gc-credentials.env`. Then, you can run:

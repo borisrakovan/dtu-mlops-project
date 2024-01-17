@@ -22,13 +22,18 @@ setup-data: venv
 
 pull-data: venv
 	@echo "Pulling data from DVC"
-	@export $$(cat .gc-credentials.env | xargs)
-	dvc pull
+	@export $$(cat .gc-credentials.env | xargs) && dvc pull
 	mkdir -p data/processed
 	unzip data/raw/data.zip -d data/processed/
 
 train: venv
 	python dtu_mlops_project/models/train_model.py
+
+predict:
+	python dtu_mlops_project/models/predict_model.py
+
+visualize:
+	python dtu_mlops_project/visualization/visualize.py
 
 train-docker:
 	docker run -it --rm --env-file .env -v $(shell pwd):/usr/src/app train:latest

@@ -18,6 +18,8 @@ class SpeechSpectrogramsTransferLearning(LightningModule):
     }
     def __init__(self, learning_rate: float, resnet_version: str, pretrained_weights: Union[str, None]):
         super().__init__()
+        self.save_hyperparameters()
+
         self.learning_rate = learning_rate
         # pick resnet version
         if resnet_version not in self.VALID_RESNET_VERSIONS:
