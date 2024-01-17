@@ -60,8 +60,8 @@ end of the project.
 * [ ] Remember to comply with good coding practices (`pep8`) while doing the project
 * [x] Do a bit of code typing and remember to document essential parts of your code
 * [x] Setup version control for your data or part of your data
-* [ ] Construct one or multiple docker files for your code
-* [ ] Build the docker files locally and make sure they work as intended
+* [x] Construct one or multiple docker files for your code
+* [x] Build the docker files locally and make sure they work as intended
 * [x] Write one or multiple configurations files for your experiments
 * [x] Used Hydra to load the configurations and manage your hyperparameters
 * [ ] When you have something that works somewhat, remember at some point to to some profiling and see if
@@ -76,10 +76,10 @@ end of the project.
 * [x] Write unit tests related to model construction and or model training
 * [ ] Calculate the coverage.
 * [x] Get some continuous integration running on the github repository
-* [ ] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
+* [x] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
 * [ ] Create a trigger workflow for automatically building your docker images
 * [ ] Get your model training in GCP using either the Engine or Vertex AI
-* [ ] Create a FastAPI application that can do inference using your model
+* [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
 * [ ] Deploy your model in GCP using either Functions or Run as the backend
 
@@ -129,12 +129,13 @@ end of the project.
 >
 > Answer:
 
-We used [torchaudio](https://pytorch.org/audio/stable/index.html) as our third-party framework.
+We used [torchaudio](https://pytorch.org/audio/stable/index.html) and [gradio](https://www.gradio.app/) as our third-party frameworks.
 Torchaudio provides functionalities to load audio-related datasets and specific audio transformations to preprocess and augment audio data.
-Specifically, we used the `torchaudio.datasets.LIBRISPEECH` dataset to load the data and the `torchaudio.transforms.[Spectrogram|FrequencyMasking|MelScale]` transformations.
+Specifically, we used the `torchaudio.datasets.LIBRISPEECH` dataset to load the data and the `torchaudio.transforms.[Spectrogram|FrequencyMasking|MelScale]` transformations, which allowed us to extract two-dimensional features from the audio data, which could then be processed by conventional computer vision models such as CNNs
 Although being part of the PyTorch ecosystem, torchaudio is not part of the PyTorch core library, and arguably less popular than its computer vision counterpart, torchvision.
-Using torchaudio allowed us to extract two-dimensional features from the audio data, which could then be processed by conventional computer vision models such as CNNs.
 Compared to other similar libraries such as _librosa_ or _scipy.signal_, the transformations included in torchaudio can run on the GPU, allowing them to be executed on the fly during training.
+Gradio is a library that allows to quickly create web-based interfaces for machine learning models, leveraging a number of built-in widgets to display and interact with the model.
+Specifically, we used the `gradio.Audio` component to load waveforms into the model, and the `gradio.Label` component to display the model's predictions.
 
 ## Coding environment
 
@@ -190,7 +191,11 @@ pip install -r requirements_dev.txt # optional, for development/tests
 >
 > Answer:
 
---- question 6 fill here ---
+We use [ruff](https://docs.astral.sh/ruff/) to enforce code quality and formatting.
+Ruff implements a number of rules taken from other linters such as Flake8 and Pylint, with the advantage of being much faster.
+We integrated ruff in our git workflow, so that it is run automatically on every commit, along with additional checks such as trailing whitespace and end-of-file newline.
+These additional checks are useful to avoid unnecessary clutter in the git history, and to avoid merge conflicts due to blank spaces.
+Furthermore, we integrated ruff in our CI pipeline, so that it is run on every pull request.
 
 ## Version control
 
@@ -303,16 +308,13 @@ An example scenario could be:
 >
 > Answer:
 
-We used Hydra to manage the configuration of our experiments, as well as to instantiate the objects used in the experiments.
-The project configuration follows a composable hierarchical structure, based on the main objects used in the project: `datamodule`, `model`, `trainer`, and `logger`.
-The top-level configuration is defined in `configs/train.yaml`, where we also define the specific sub-group for each of the aforementioned objects.
-These are specified at the beginning of the top-level configuration file, in a special `defaults` section.
-Each sub-group can have one or more configuration files, which are found inside a sub-folder with the same name as the sub-group.
-For example, the `model` sub-group has configuration files `configs/model/resnet34.yaml` and `configs/model/resnet50.yaml`.
-Each sub-group file features a `_target_` key, which specifies the class to be instantiated by hydra's `hydra.utils.instantiate()` function.
-In this way, models and datasets can be easily swapped by changing their respective configuration files.
+We used Hydra to manage the configuration.
+We follow a composable hierarchical structure, based on the following elements: `datamodule`, `model`, `trainer`, and `logger`.
+We have two root files: `configs/train.yaml` and `configs/infer.yaml`, which are used during training and inference, respectively.
+Each element can have one or more configuration files: for example, the `model` sub-group has configuration files `configs/model/resnet34.yaml` and `configs/model/resnet50.yaml`.
+This allows us to easily swapt models and datasets in an experiment.
 Furthermore, sub-groups can share variables using the `${group.varname}` syntax, avoiding needless repetitions.
-Finally, thanks to hydra, each argument defined in the configuration files can be overridden from the command line, e.g. `python dtu_mlops_project/models/train_model.py run_name=highLR_bigBS model.learning_rate=1e-2 datamodule.batch_size=2048`.
+Finally, each configuration argument can be overridden from the command line, e.g. `train_model.py run_name=highLR_bigBS model.learning_rate=1e-2 datamodule.batch_size=2048`.
 
 
 ### Question 13
