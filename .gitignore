@@ -75,10 +75,7 @@ target/
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 
-# exclude data from source control by default
-/data/
-# include /data/raw/data.zip
-!/data/raw/data.zip.dvc
+/playground/
 
 # Mac OS-specific storage files
 .DS_Store
