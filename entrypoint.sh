@@ -2,9 +2,9 @@
 set -e
 
 # Echo command to let the user know what's happening
-echo "Pulling data from DVC..."
+echo "Pulling data from GCS..."
 
-dvc pull
+gsutil cp gs:///dtu_mlops_project_data/data.zip /usr/src/app/data/raw/
 
 # Unzip data, if necessary
 mkdir -p /usr/src/app/data/processed

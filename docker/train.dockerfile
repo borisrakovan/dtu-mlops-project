@@ -28,8 +28,5 @@ WORKDIR /usr/src/app
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -e . --no-cache-dir
 
-# Install DVC
-RUN pip install dvc[gs]
-
 #ENTRYPOINT ["sh", "/usr/src/app/entrypoint.sh"]
-ENTRYPOINT ["/bin/bash", "-c", "./entrypoint.sh"]
+ENTRYPOINT ["python",  "-u", "dtu_mlops_project/models/train_model.py"]
