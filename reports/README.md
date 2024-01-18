@@ -330,7 +330,7 @@ Finally, each configuration argument can be overridden from the command line, e.
 >
 > Answer:
 
---- question 13 fill here ---
+We logged our experiments using Weights & Biasis (wandb), either locally or form the cloud. Every training run was stored, the stored output includes the best weights of the run, the conda environment.yml & requirements.txt but also the hydra hyperparameter configuration (see answer to Q12). We also made use of docker to ensure there are no operating system dependent influences, and we use dvc to track the version of the trainingdata. To reproduce a specific training run or trained model, one would clone the repository, build the docker contrainer 'train.dockerfile' (which install the proper env), specify the proper (hyperparameter-)setting which are obtained from WandB and download the correct version of the data using dvc. With all these components the training is explicitly defined (after seeding the random initialization of weights at the beginning of training, which is included in the configs).
 
 ### Question 14
 
@@ -347,7 +347,14 @@ Finally, each configuration argument can be overridden from the command line, e.
 >
 > Answer:
 
---- question 14 fill here ---
+```markdown
+![wandb_group66](figures/wandb_group66.png)
+```
+```markdown
+![output_visualization](figures/fig.png)
+```
+
+As seen in the first image, we did multiple runs, both locally and using Google Cloud Compute Engine, with similar sets of hyperparameters. As the focus was on the MLOps pipeline around the model, we did not focus too much on optimizing the model. We did several dummy training runs to test several parts of our pipeline, like docker containers and Vitual Machines. To be able to develop the inference part while setting up the cloud training we did locally train the model for three epochs in order to obtain a model with reasonably good performance. Our model used for inference achieved an accuracy of 93%, which is quite high considering that we have treated audio data as imagery, thereby discarding the temporal information which is the most valuable feature for classification of audio data, which is why RNNs are more commonly applied. We logged the accuracy and loss for the training, validation and test sets. We did not log images using W&B, but we did set up an inference script which allowed for visual comparison of the input data, pre-processed data, the model prediction, the true label and the distribution of probabilities of the 35 classes in our SpeechCommands dataset, shown in the second figure.
 
 ### Question 15
 
@@ -362,7 +369,8 @@ Finally, each configuration argument can be overridden from the command line, e.
 >
 > Answer:
 
---- question 15 fill here ---
+We mainly use docker for consolidation of the training script, together with the dependencies and the trainingdata, into a configuration that is easy and convenient to use both locally and in the cloud. The dockerfile is linked to here: [docker/train.dockerfile](https://github.com/borisrakovan/dtu-mlops-project/blob/add-report/docker/train.dockerfile). We complete workflow by using a Makefile for each of the major processes. We have implemented a cloudbuild.yml workflow to automatically (re-)build our docker image when the main branch is pushed and publish it to our project Container Registry on Google Cloud.
+There are several ways to run the docker images. First one can clone the repository and build a new image, this image can then be run locally to create a docker container. Another use case is to pull the latest (CI-generated) image from the Container Registry, and then build it locally or when on a Virtual Machine (for example with Google Cloud Compute Engine).
 
 ### Question 16
 
