@@ -98,3 +98,5 @@ junit/
 outputs/
 wandb/
 wandb_tests/
+
+train_config_cpu.yml
