@@ -482,6 +482,8 @@ curl -X 'POST' \
 >
 > Answer:
 
+We did not implement monitoring of our deployed model. Monitoring would help ensure proper operations, also long after training. We would have implemented monitoring to check the performance of our model over time, to observe whether model decay would take place. A reason for this could be data drifting, which is quite likely in our case of speech audio data. Our model is trained on 35 classes, 35 different words, that are quite well balance in occurance. If users would use our UI (via FastAPI) to interact with the model, we could exploit that data to further train the model (in case we manually label the new data), if one of the classes is occuring more frequently than the others, or more noisy audio data is fed to the model (if we would implement some form of continuous training) the performance could decrease over time. Monitoring could help notify us when this happens, such that we can retrain the model to bring the performance back up to the required level.
+
 
 
 ### Question 24
@@ -497,6 +499,7 @@ curl -X 'POST' \
 > Answer:
 
 --- question 24 fill here ---
+TODO
 
 ## Overall discussion of project
 
@@ -559,4 +562,4 @@ Furthermore, figuring out the exact requirements for the VM instance was also pa
 
 <TODO Boris>
 Student s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; he also implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using Weights & Biases. Finally, he implemented the FastAPI application for inference, along with the Gradio interface.
-Student s237248 was in charge of the image classification model selection and set-up, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with the Compute Engine, which was completed together with groupmembers, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the groupmembers, but contributed equally in terms of time spent.
+Student s237248 was in charge of the image classification model selection and implementation using torchvision, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with the Compute Engine, which was completed together with groupmembers, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the groupmembers, but contributed equally in terms of time spent.
