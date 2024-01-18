@@ -15,12 +15,6 @@ COPY dtu_mlops_project /usr/src/app/dtu_mlops_project
 COPY data/ /usr/src/app/data/
 COPY configs/ /usr/src/app/configs/
 
-# Copy the entrypoint script
-COPY entrypoint.sh /usr/src/app/entrypoint.sh
-
-# Give execution permissions to the script
-RUN chmod +x /usr/src/app/entrypoint.sh
-
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
