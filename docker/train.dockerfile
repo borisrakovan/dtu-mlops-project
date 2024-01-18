@@ -9,7 +9,6 @@ RUN apt update && \
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-
 COPY requirements.txt /usr/src/app/requirements.txt
 COPY pyproject.toml /usr/src/app/pyproject.toml
 COPY dtu_mlops_project /usr/src/app/dtu_mlops_project
@@ -28,5 +27,4 @@ WORKDIR /usr/src/app
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -e . --no-cache-dir
 
-#ENTRYPOINT ["sh", "/usr/src/app/entrypoint.sh"]
 ENTRYPOINT ["python",  "-u", "dtu_mlops_project/models/train_model.py"]

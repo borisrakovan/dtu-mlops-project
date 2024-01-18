@@ -27,7 +27,7 @@ class SpeechCommands(Dataset):
         # store other args
         self.n_classes = len(self.idx_to_class)
         self.preproc = preproc
-        self.indexes = self.indexes[:100] # TODO remove
+        # self.indexes = self.indexes[:100]
 
 
     def __getitem__(self, idx: int) -> Tuple[Tensor, int]:

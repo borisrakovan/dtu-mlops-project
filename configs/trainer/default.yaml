@@ -6,7 +6,7 @@ devices: 'auto'
 num_nodes: 1
 precision: null
 fast_dev_run: False
-max_epochs: 1 # todo
+max_epochs: 5
 min_epochs: null
 max_steps: -1
 min_steps: null
