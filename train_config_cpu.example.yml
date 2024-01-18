@@ -4,3 +4,6 @@ workerPoolSpecs:
     replicaCount: 1
     containerSpec:
         imageUri: gcr.io/dtu-mlops-411420/train:latest
+        env:
+            - name: "WANDB_API_KEY"
+              value: "fill me"
