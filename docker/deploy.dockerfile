@@ -14,7 +14,6 @@ COPY requirements.txt /usr/src/app/requirements.txt
 COPY pyproject.toml /usr/src/app/pyproject.toml
 COPY dtu_mlops_project /usr/src/app/dtu_mlops_project
 COPY configs/ /usr/src/app/configs/
-COPY models/ /usr/src/app/models/
 COPY data/processed/class_idx_export.npy /usr/src/app/data/processed/class_idx_export.npy
 
 # Set the working directory in the container
@@ -22,5 +21,8 @@ WORKDIR /usr/src/app
 
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -e . --no-cache-dir
+
+EXPOSE 8001
+RUN mkdir -p /usr/src/app/models
 
 ENTRYPOINT ["python", "-u", "dtu_mlops_project/webapp/main.py"]

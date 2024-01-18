@@ -76,4 +76,10 @@ web-gui: venv
 webapp: venv web-api web-gui
 
 web-api-docker:
-	docker run -it --rm --env-file .env -p 8001:8001 deploy:latest
+	@GOOGLE_APPLICATION_CREDENTIALS=$$(grep GOOGLE_APPLICATION_CREDENTIALS .gc-credentials.env | cut -d '=' -f2) ; \
+	docker run -it --rm \
+		--env-file .env \
+		-e GOOGLE_APPLICATION_CREDENTIALS=/credentials.json \
+		-v $$GOOGLE_APPLICATION_CREDENTIALS:/credentials.json:ro \
+		-p 8001:8001 \
+		deploy:latest
