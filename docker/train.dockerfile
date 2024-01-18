@@ -2,13 +2,12 @@ FROM python:3.11-slim
 
 RUN apt update && \
     apt install --no-install-recommends -y build-essential gcc && \
-    apt install -y ffmpeg && \
+    apt install -y ffmpeg && apt install -y unzip && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
-
 
 COPY requirements.txt /usr/src/app/requirements.txt
 COPY pyproject.toml /usr/src/app/pyproject.toml
@@ -22,4 +21,4 @@ WORKDIR /usr/src/app
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -e . --no-cache-dir
 
-ENTRYPOINT ["python", "-u", "dtu_mlops_project/models/train_model.py"]
+ENTRYPOINT ["python",  "-u", "dtu_mlops_project/models/train_model.py"]

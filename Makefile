@@ -35,11 +35,39 @@ predict:
 visualize:
 	python dtu_mlops_project/visualization/visualize.py
 
+# for GPU run as `make train-docker GPU=1`
 train-docker:
-	docker run -it --rm --env-file .env -v $(shell pwd):/usr/src/app train:latest
+	@GOOGLE_APPLICATION_CREDENTIALS=$$(grep GOOGLE_APPLICATION_CREDENTIALS .gc-credentials.env | cut -d '=' -f2) ; \
+	docker run -it --rm \
+		--user $$(id -u):$$(id -g) \
+		--env-file .env \
+		-e GOOGLE_APPLICATION_CREDENTIALS=/credentials.json \
+		-v $$GOOGLE_APPLICATION_CREDENTIALS:/credentials.json:ro \
+		-v $$(shell pwd):/usr/src/app \
+		$(if $(GPU),--gpus all,) \
+		train:latest
 
-make test: venv
+train-cloud:
+	@DATE=$$(date +%Y%m%d-%H%M%S) ; \
+	JOB_ID=$$(gcloud ai custom-jobs create \
+		--region=europe-west1 \
+		--display-name=train-run-$$DATE \
+		--config=train_config_cpu.yml \
+		--format="value(name)") ; \
+	echo "Streaming logs for Job ID: $$JOB_ID" ; \
+	gcloud ai custom-jobs stream-logs $$JOB_ID
+
+
+test: venv
 	pytest tests/
 
-make test-coverage: venv
+test-coverage: venv
 	pytest tests/ --cov-config=.coveragerc --cov=dtu_mlops_project --cov-report=xml --cov-report=html
+
+web-api: venv
+	python dtu_mlops_project/webapp/main.py
+
+web-gui: venv
+	python dtu_mlops_project/webapp/gui.py
+
+webapp: venv web-api web-gui
