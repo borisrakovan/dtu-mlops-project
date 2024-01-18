@@ -39,6 +39,16 @@ def prepare_data(bucket_name: str, source_blob_name: str, destination_file_name:
         logger.error(f"Error unzipping file: {e}")
 
 
+def upload_to_gcs(bucket_name: str, source_file_name: str, destination_blob_name: str) -> None:
+    """Uploads a file to the bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+    logger.info(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+
 @hydra.main(version_base="1.3", config_path="../../configs", config_name="train.yaml")
 def train_model(cfg):
     logger = logging.getLogger(__name__)
@@ -78,9 +88,9 @@ def train_model(cfg):
 
     train_metrics = trainer.callback_metrics
 
+    ckpt_path = trainer.checkpoint_callback.best_model_path
     if cfg.get("test"):
         logger.info("Starting testing!")
-        ckpt_path = trainer.checkpoint_callback.best_model_path
         if ckpt_path == "":
             logger.warning("Best ckpt not found! Using current weights for testing...")
             ckpt_path = None
@@ -92,6 +102,9 @@ def train_model(cfg):
     # merge train and test metrics
     metric_dict = {**train_metrics, **test_metrics}
     logger.info(f"Metrics: {metric_dict}")
+
+    upload_to_gcs(cfg.bucket_name, ckpt_path, cfg.model_blob_name)
+
 
     # return optimized metric
     return metric_dict

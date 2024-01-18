@@ -14,7 +14,7 @@ ckpt_path: null
 test: true
 bucket_name: dtu_mlops_project_data
 source_blob_name: data/raw/data.zip
-
+model_blob_name: models/model_${now:%H-%M-%S}.pt
 
 hydra:
   job:
