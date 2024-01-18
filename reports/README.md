@@ -273,7 +273,7 @@ An example scenario could be:
 >
 > Answer:
 
---- question 10 fill here ---
+We did use dvc to manage the data in our project. We added our trianingdata to DVC, and verioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using dvc. We did not use the version control functionality of dvc, as we did not have different versions of the trainingdata, but if this were a real evolving project it would be likely that the trainingdata would increase or be modified in time, and then using dvc would allow to specify which version of the trainigdata to use during training.
 
 ### Question 11
 
