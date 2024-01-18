@@ -289,7 +289,7 @@ We did use dvc to manage the data in our project. We added our trianingdata to D
 >
 > Answer:
 
---- question 11 fill here ---
+As our CI setup we have set up unittesting using pytest, linting using ruff (also with pre-commit) in [ci.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/.github/workflows/ci.yml) and in a different file automated docker image creation using [cloudbuild.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/cloudbuild.yml). We have not implemented tests for different os and pythonv versions, because our aim is to use the repository within a docker container with linux and python 3.11. Therefore there is no need to test it for other os. We use caching for pip, this prevents having to re-download the dependencies every time CI is called.
 
 ## Running code and tracking experiments
 
