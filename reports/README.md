@@ -382,7 +382,7 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 16 fill here ---
+The major safeguard against bugs is our feature branch + pull request workflow (detailed in Answer 9). New code is reviewed by one or more members of the team before it is added to the main branch. This approach allows for other team members to run the new version of the code first to test it (and also encounter e.g. any os specific issues or hardcoded filepaths). Suggestions for improvements were made as comments on the pull request. We did not profile our code, but we also certainly do not think it was perfect, we simply chose to allocate more time to other parts of the project.
 
 ## Working in the cloud
 
@@ -399,7 +399,7 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 17 fill here ---
+We used the following of Google Cloud Platform's services: Compute Engine, Cloud Storage, Container Registry, and Cloud Build. Compute Engine was used for creating Virtual Machines to run our docker containers and to perform training in the cloud. Cloud Storage is used to store our training dataset (which is version controlled using dvc) and to store a trained version of the model which is used for prediction (using FastAPI). The Cloud Build is the CI endpoint of our CI workflow that was specified in cloudbuild.yml, that is: when a branch is pushed, the dockerfile is built into a docker image, which is then pushed to Cloud Build, from where it can be pulled from anywhere and can then be ran to construct a corresponding container. Container Registry was used to automatically build containers.
 
 ### Question 18
 
@@ -414,7 +414,7 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 18 fill here ---
+We used Compute Engine to run several processes within Google Cloud. At first we used VMs to test how well our developed core model-training code was generalized. Later we used it to launch our docker containers and perform training in the cloud. We also used it to deploy our model remotely (after implementing it locally). We used instances from the deeplearning platform release and pytorch image family, both CPU and GPU. We both worked with the Virtual Machines interactively, and also directly launched docker containers with entrypoints. The docker containers were set up to download the training data and in case of inference also a trained model from Cloud Storage.
 
 ### Question 19
 
@@ -482,7 +482,7 @@ curl -X 'POST' \
 >
 > Answer:
 
---- question 23 fill here ---
+
 
 ### Question 24
 
