@@ -215,7 +215,6 @@ Furthermore, we integrated ruff in our CI pipeline, so that it is run on every p
 > Answer:
 
 We implemented tests for model construction, as well as data preprocessing and augmentation during both training and testing.
-TODO continue
 Furthermore, since the objects instantiated in the tests get their configuration from the `hydra` configuration files, we also indirectly verify that the configuration files are valid.
 We initially implemented a test for the entire training pipeline, but it was deemed too slow and resource-intensive to run in the CI pipeline; this was removed in commit [0fb85a5](https://github.com/borisrakovan/dtu-mlops-project/commit/0fb85a502f2bf7bc3f09c2ec34b172bcf92d0547).
 
