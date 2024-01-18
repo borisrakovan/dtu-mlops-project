@@ -57,7 +57,7 @@ end of the project.
 * [x] Fill out the `make_dataset.py` file such that it downloads whatever data you need and
 * [x] Add a model file and a training script and get that running
 * [x] Remember to fill out the `requirements.txt` file with whatever dependencies that you are using
-* [ ] Remember to comply with good coding practices (`pep8`) while doing the project
+* [x] Remember to comply with good coding practices (`pep8`) while doing the project
 * [x] Do a bit of code typing and remember to document essential parts of your code
 * [x] Setup version control for your data or part of your data
 * [x] Construct one or multiple docker files for your code
@@ -77,7 +77,7 @@ end of the project.
 * [ ] Calculate the coverage.
 * [x] Get some continuous integration running on the github repository
 * [x] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
-* [ ] Create a trigger workflow for automatically building your docker images
+* [x] Create a trigger workflow for automatically building your docker images
 * [ ] Get your model training in GCP using either the Engine or Vertex AI
 * [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
@@ -95,8 +95,8 @@ end of the project.
 ### Additional
 
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Make sure all group members have a understanding about all parts of the project
-* [ ] Uploaded all your code to github
+* [x] Make sure all group members have a understanding about all parts of the project
+* [x] Uploaded all your code to github
 
 ## Group information
 
@@ -273,7 +273,7 @@ An example scenario could be:
 >
 > Answer:
 
-We did use dvc to manage the data in our project. We added our trianingdata to DVC, and verioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using dvc. We did not use the version control functionality of dvc, as we did not have different versions of the trainingdata, but if this were a real evolving project it would be likely that the trainingdata would increase or be modified in time, and then using dvc would allow to specify which version of the trainigdata to use during training.
+We did use DVC to manage the data in our project. We added our trianing data to DVC, and versioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using DVC. We did not use the version control functionality of DVC, as we did not have different versions of the training data, but if this were a real evolving project it would be likely that the training data would increase or be modified in time, and then using DVC would allow to specify which version of the trainig data to use during training.
 
 ### Question 11
 
@@ -289,7 +289,7 @@ We did use dvc to manage the data in our project. We added our trianingdata to D
 >
 > Answer:
 
-As our CI setup we have set up unittesting using pytest, linting using ruff (also with pre-commit) in [ci.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/.github/workflows/ci.yml) and in a different file automated docker image creation using [cloudbuild.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/cloudbuild.yml). We have not implemented tests for different os and pythonv versions, because our aim is to use the repository within a docker container with linux and python 3.11. Therefore there is no need to test it for other os. We use caching for pip, this prevents having to re-download the dependencies every time CI is called.
+As part of our CI setup, we have set up unit testing using pytest, linting using ruff (also with pre-commit) in [ci.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/.github/workflows/ci.yml). Furthermore, in a different file, we automated docker image creation using [cloudbuild.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/cloudbuild.yml). We have not implemented tests for different OSs or Python versions, because our aim is to use the repository for running experiments and deploying the model within docker containers featuring a predefined environment (Linux and Python 3.11). Therefore, there is no need to test it for other OSs. To speed up CI execution, we use the caching feature for our pip requirements; this prevents having to re-download the dependencies every time CI is called.
 
 ## Running code and tracking experiments
 
@@ -347,12 +347,8 @@ We logged our experiments using Weights & Biasis (wandb), either locally or form
 >
 > Answer:
 
-```markdown
-![wandb_group66](figures/wandb_group66.png)
-```
-```markdown
-![output_visualization](figures/fig.png)
-```
+![W&B](figures/wand_group66_compressed.png)
+![Output visualization](figures/fig.png)
 
 As seen in the first image, we did multiple runs, both locally and using Google Cloud Compute Engine, with similar sets of hyperparameters. As the focus was on the MLOps pipeline around the model, we did not focus too much on optimizing the model. We did several dummy training runs to test several parts of our pipeline, like docker containers and Vitual Machines. To be able to develop the inference part while setting up the cloud training we did locally train the model for three epochs in order to obtain a model with reasonably good performance. Our model used for inference achieved an accuracy of 93%, which is quite high considering that we have treated audio data as imagery, thereby discarding the temporal information which is the most valuable feature for classification of audio data, which is why RNNs are more commonly applied. We logged the accuracy and loss for the training, validation and test sets. We did not log images using W&B, but we did set up an inference script which allowed for visual comparison of the input data, pre-processed data, the model prediction, the true label and the distribution of probabilities of the 35 classes in our SpeechCommands dataset, shown in the second figure.
 
@@ -426,7 +422,7 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 19 fill here ---
+![GCP Bucket](figures/bucket.png)
 
 ### Question 20
 
@@ -435,7 +431,7 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 20 fill here ---
+![GCP Container Registry](figures/registry.png)
 
 ### Question 21
 
@@ -444,7 +440,7 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 21 fill here ---
+![GCP Build History](figures/build.png)
 
 ### Question 22
 
@@ -460,7 +456,17 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 22 fill here ---
+We deployed our model using FastAPI, which allows to easily wrap a model into a web application.
+Our FastAPI application is defined in `webapp/main.py`, and is configured using hydra and the `configs/infer.yaml` configuration file.
+The application features one main endpoint, `/predict_audio`, available as a POST request, where the user can upload an audio file (as a `multipart/form-data` form) and receive the model's prediction as a JSON response, consisting of the predicted class, its index, and the model's logits for all the classes.
+The application can be deployed locally using `make web-api` and queried using:
+```
+curl -X 'POST' \
+  'http://0.0.0.0:8001/predict_audio/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'data=@path/to/audio_file.wav;type=audio/wav'
+```
 
 ### Question 23
 
@@ -524,7 +530,16 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 26 fill here ---
+One of the biggest challenges was figuring out a suitable workflow for data and artifact handling. Specifically, we wanted to use DVC to version the data, and W&B to store logs, but also wanted to easily access the trained models and checkpoints, so that they could be deployed later.
+The solution we came up with was to store the dataset in a GCP bucket, as a single ZIP archive, and use DVC to version it; this way, we could easily access the data both locally and from the cloud.
+For checkpoints, we decided to simply store them in the same bucket.
+Another challenge consisted in enabling cloud training from the Google Compute Engine platform.
+This is because, on a GCE instance, certain interactive setup steps are more difficult to perform, such as logging in to W&B or GCP, or downloading the dataset.
+Furthermore, we had to figure out how to integrate the dataset into the docker image, so that it could be used during training.
+Initially, we attempted at integrating the dataset into the docker image, so that it would only need to be downloaded once, i.e. during the image build.
+However, we faced an issue whereby the dataset was available in the locally-built image but not in the remotely-built one.
+Furthermore, figuring out the exact requirements for the VM instance was also particularly challenging, especially due to its trial-and-error nature.
+
 
 ### Question 27
 
@@ -541,4 +556,6 @@ There are several ways to run the docker images. First one can clone the reposit
 >
 > Answer:
 
---- question 27 fill here ---
+<TODO>
+Student s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; he also implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using Weights & Biases. Finally, he implemented the FastAPI application for inference, along with the Gradio interface.
+<TODO>
