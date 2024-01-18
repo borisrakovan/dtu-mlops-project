@@ -96,6 +96,20 @@ If you want to run the container with a GPU (for NVIDIA, follow the setup instru
 $ make train-docker-gpu
 ```
 
+To run training in the cloud, you can use the following command:
+
+```bash
+cp train_config_cpu.example.yml train_config_cpu.yml
+```
+
+Replace the values in `train_config_cpu.yml` with your own values, and then run
+
+```bash
+$ make train-cloud
+```
+
+You need to be authenticated to GCP. This will trigger a training run on Vertex AI using the latest train image and storing the resulting model on GCS.
+
 
 # Local deployment
 The project can be deployed locally using FastAPI, and features an optional browser-based UI.

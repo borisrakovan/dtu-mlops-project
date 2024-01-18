@@ -48,6 +48,17 @@ train-docker:
 		-v $(shell pwd):/usr/src/app \
 		train:latest
 
+train-cloud:
+	@DATE=$$(date +%Y%m%d-%H%M%S) ; \
+	JOB_ID=$$(gcloud ai custom-jobs create \
+		--region=europe-west1 \
+		--display-name=train-run-$$DATE \
+		--config=train_config_cpu.yml \
+		--format="value(name)") ; \
+	echo "Streaming logs for Job ID: $$JOB_ID" ; \
+	gcloud ai custom-jobs stream-logs $$JOB_ID
+
+
 test: venv
 	pytest tests/
 
