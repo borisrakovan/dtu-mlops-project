@@ -74,11 +74,11 @@ end of the project.
 
 * [x] Write unit tests related to the data part of your code
 * [x] Write unit tests related to model construction and or model training
-* [ ] Calculate the coverage.
+* [x] Calculate the coverage.
 * [x] Get some continuous integration running on the github repository
 * [x] Create a data storage in GCP Bucket for you data and preferable link this with your data version control setup
 * [x] Create a trigger workflow for automatically building your docker images
-* [ ] Get your model training in GCP using either the Engine or Vertex AI
+* [x] Get your model training in GCP using either the Engine or Vertex AI
 * [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
 * [ ] Deploy your model in GCP using either Functions or Run as the backend
@@ -232,7 +232,11 @@ We initially implemented a test for the entire training pipeline, but it was dee
 >
 > Answer:
 
---- question 8 fill here ---
+Our total test coverage is 13%. We're far from 100% coverage but even if we were close then it wouldn't mean our code is
+bug free. The code coverage is a reliable metric only as long as the tests are reliable and test the right things.
+For example, if we had a test that only tested that the model is constructed without errors, but not that it is trained
+correctly, then the code coverage would be high but the test would not be very useful. Furthermore, the code coverage
+does not test the correctness of the code, only that it is executed.
 
 ### Question 9
 
@@ -273,7 +277,7 @@ An example scenario in our collaborative workflow could be:
 >
 > Answer:
 
-We did use DVC to manage the data in our project. We added our trianing data to DVC, and versioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using DVC. We did not use the version control functionality of DVC, as we did not have different versions of the training data, but if this were a real evolving project it would be likely that the training data would increase or be modified in time, and then using DVC would allow to specify which version of the trainig data to use during training. DVC was however still a useful addition for accessing our training data on Cloud Storage from within the docker containers on the Virtual Machines.
+We did use DVC to manage the data in our project. We added our training data to DVC, and versioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using DVC. We did not use the version control functionality of DVC, as we did not have different versions of the training data, but if this were a real evolving project it would be likely that the training data would increase or be modified in time, and then using DVC would allow to specify which version of the trainig data to use during training.
 
 ### Question 11
 
@@ -289,7 +293,7 @@ We did use DVC to manage the data in our project. We added our trianing data to 
 >
 > Answer:
 
-As part of our CI setup, we have set up unit testing using pytest, linting using ruff (also with pre-commit) in [ci.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/.github/workflows/ci.yml). Furthermore, in a different file, we automated docker image creation using [cloudbuild.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/cloudbuild.yml). We have not implemented tests for different OSs or Python versions, because our aim is to use the repository for running experiments and deploying the model within docker containers featuring a predefined environment (Linux and Python 3.11). Therefore, there is no need to test it for other OSs. To speed up CI execution, we use the caching feature for our pip requirements; this prevents having to re-download the dependencies every time CI is called.
+As part of our CI setup, we have set up unit testing using pytest, linting using ruff (also with pre-commit) in [ci.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/.github/workflows/ci.yml). Furthermore, in a different file, we automated docker image build using [cloudbuild.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/cloudbuild.yml). We have not implemented tests for different OSs or Python versions, because our aim is to use the repository for running experiments and deploying the model within docker containers featuring a predefined environment (Linux and Python 3.11). Therefore, there is no need to test it for other OSs. To speed up CI execution, we use the caching feature for our pip requirements; this prevents having to re-download the dependencies every time CI is called.
 
 
 ## Running code and tracking experiments
@@ -399,7 +403,7 @@ The major safeguard against bugs is our feature branch + pull request workflow (
 >
 > Answer:
 
-We used the following of Google Cloud Platform's services: Compute Engine, Cloud Storage, Container Registry, and Cloud Build. Compute Engine was used for creating Virtual Machines to run our docker containers and to perform training in the cloud. Cloud Storage is used to store our training dataset (which is version controlled using dvc) and to store a trained version of the model which is used for prediction (using FastAPI). The Cloud Build is the CI endpoint of our CI workflow that was specified in cloudbuild.yml, that is: when a branch is pushed, the dockerfile is built into a docker image, which is then pushed to Cloud Build, from where it can be pulled from anywhere and can then be ran to construct a corresponding container. Container Registry was used to automatically build containers.
+We used the following of Google Cloud Platform's services: Compute Engine, Cloud Storage, Container Registry, and Cloud Build, and Vertex AI. Compute Engine was used for creating Virtual Machines to run our docker containers and to perform training in the cloud. Cloud Storage is used to store our training dataset (which is version controlled using dvc) and to store a trained version of the model which is used for prediction (using FastAPI). The Cloud Build is the CI endpoint of our CI workflow that was specified in cloudbuild.yml, that is: when a branch is pushed, the dockerfile is built into a docker image, which is then pushed to Cloud Build, from where it can be pulled from anywhere and can then be ran to construct a corresponding container. Container Registry was used to automatically build containers.
 
 ### Question 18
 
@@ -498,8 +502,8 @@ We did not implement monitoring of our deployed model. Monitoring would help ens
 >
 > Answer:
 
---- question 24 fill here ---
-TODO
+We used 1.80 EUR in total, of which 1.13 EUR was used on Cloud Storage and the rest on Compute Engine and networking.
+The most expensive service was GCS due to the volume of data we had to store there (both the dataset and the trained models).
 
 ## Overall discussion of project
 
@@ -560,6 +564,8 @@ Furthermore, figuring out the exact requirements for the VM instance was also pa
 >
 > Answer:
 
-<TODO Boris>
+Student s240506 was in charge of creating a git repository, adding cookiecutter structure and updating it to suit our specific needs, adding most of Makefile commands, setting up initial project README.md, writing the Dockerfile for training image, setting up the whole CI/CD pipeline, integrating dvc with remote GCS storage, setting up GCP project and services, setting up GCS bucket, setting up automatic docker image builds with Cloudbuild, calculating test coverage both locally and in CI, getting the model training on Vertex AI and uploading results to GCS, updating the training script to integrate well with GCS.
+
 Student s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; he also implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using Weights & Biases. Finally, he implemented the FastAPI application for inference, along with the Gradio interface.
+
 Student s237248 was in charge of the image classification model selection and implementation using torchvision, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with the Compute Engine, which was completed together with groupmembers, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the groupmembers, but contributed equally in terms of time spent.
