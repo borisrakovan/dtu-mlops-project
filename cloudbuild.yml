@@ -3,3 +3,7 @@ steps:
     args: [ 'build', '-t', 'gcr.io/dtu-mlops-411420/train:latest', '-f', 'docker/train.dockerfile', '.' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'gcr.io/dtu-mlops-411420/train:latest' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/dtu-mlops-411420/deploy:latest', '-f', 'docker/deploy.dockerfile', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'gcr.io/dtu-mlops-411420/deploy:latest' ]

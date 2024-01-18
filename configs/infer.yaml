@@ -3,7 +3,7 @@
 defaults:
   - datamodule: speechcmd
   - model: resnet50
-  - predict: forward
+  - predict: default
   - _self_
 
 seed: 42

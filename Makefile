@@ -12,6 +12,9 @@ venv:
 build-image-train:
 	docker build -t train:latest -f docker/train.dockerfile .
 
+build-image-deploy:
+	docker build -t deploy:latest -f docker/deploy.dockerfile .
+
 lint: venv
 	ruff .
 
@@ -71,3 +74,6 @@ web-gui: venv
 	python dtu_mlops_project/webapp/gui.py
 
 webapp: venv web-api web-gui
+
+web-api-docker:
+	docker run -it --rm --env-file .env -p 8001:8001 deploy:latest

@@ -1,0 +1,2 @@
+filepath_model_checkpoint: models/epoch=5-step=15912.ckpt
+filepath_dot_wav_audio: null
