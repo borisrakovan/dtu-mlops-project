@@ -131,7 +131,7 @@ end of the project.
 
 We used [torchaudio](https://pytorch.org/audio/stable/index.html) and [gradio](https://www.gradio.app/) as our third-party frameworks.
 Torchaudio provides functionalities to load audio-related datasets and specific audio transformations to preprocess and augment audio data.
-Specifically, we used the `torchaudio.datasets.LIBRISPEECH` dataset to load the data and the `torchaudio.transforms.[Spectrogram|FrequencyMasking|MelScale]` transformations, which allowed us to extract two-dimensional features from the audio data, which could then be processed by conventional computer vision models such as CNNs
+Specifically, we used the `torchaudio.datasets.SPEECHCOMMANDS` dataset to load the data and the `torchaudio.transforms.[Spectrogram|FrequencyMasking|MelScale]` transformations, which allowed us to extract two-dimensional features from the audio data, which could then be processed by conventional computer vision models such as CNNs
 Although being part of the PyTorch ecosystem, torchaudio is not part of the PyTorch core library, and arguably less popular than its computer vision counterpart, torchvision.
 Compared to other similar libraries such as _librosa_ or _scipy.signal_, the transformations included in torchaudio can run on the GPU, allowing them to be executed on the fly during training.
 Gradio is a library that allows to quickly create web-based interfaces for machine learning models, leveraging a number of built-in widgets to display and interact with the model.
@@ -250,15 +250,15 @@ does not test the correctness of the code, only that it is executed.
 >
 > Answer:
 
-We strived to use the full extent of the git workflow, including branches and pull requests.
-Specifically, we handled the development of each feature in a separate branch, and merged it into the main branch using a pull request.
-Furthermore, we used the "review" feature of GitHub to review each other's code and discuss additional modifications before merging it into the main branch. Because we have at this moment not deployed an operational version of the repository, we refrained for using a dev branch. If the repository were used in production we would have implemented a dev branch in between the main branch and the (short-lived) feature branches, merging the feature branches with dev and only merging dev with main upon large relevant changes and after thorough testing.
+We handled the development of each feature in separate branches, using pull requests to merge into main.
+We used the "review" feature to review each other's code and discuss additional modifications before finalizing.
+Since we haven't deployed a fully operational version of the repository, we refrained for using a dev branch. In a production scenario, we would have implemented a dev branch in between the main branch and the (short-lived) feature branches, merging the feature branches with dev and only merging dev with main upon large relevant changes and extensive testing.
 An example scenario in our collaborative workflow could be:
 1. Group member **A** is assigned the task of implementing wandb logging.
 2. **A** creates a new local branch `add-wandb` and starts implementing the feature.
 3. **A** pushes the changes to the remote branch.
-4. Occasionally, **A** fetches the changes from the main branch (such as those introduced by a merged PR) and integrates them into the local branch to keep it up to date, using `git rebase origin/main`.
-5. When the feature is implemented, **A** creates a pull request and assigns it to one or more group members for review.
+4. Occasionally, **A** fetches changes from the main branch and integrates them into the local branch, using rebase.
+5. Once done, **A** creates a pull request and assigns it for review.
 6. The reviewer(s) can comment on the code and request changes
 7. Steps 3 to 6 are repeated until the reviewer(s) approve the PR.
 8. The PR is merged into the main branch.
@@ -563,8 +563,8 @@ Furthermore, figuring out the exact requirements for the VM instance was also pa
 >
 > Answer:
 
-Student s240506 was in charge of creating a git repository, adding cookiecutter structure and updating it to suit our specific needs, adding most of Makefile commands, setting up initial project README.md, writing the Dockerfile for training image, setting up the whole CI/CD pipeline, integrating dvc with remote GCS storage, setting up GCP project and services, setting up GCS bucket, setting up automatic docker image builds with Cloudbuild, calculating test coverage both locally and in CI, getting the model training on Vertex AI and uploading results to GCS, updating the training script to integrate well with GCS.
+s240506 was in charge of creating a git repository, adding and customizing cookiecutter structure, adding most of Makefile commands, setting up initial project README, writing the Dockerfile for training, setting up the CI/CD pipeline, integrating dvc with remote GCS storage, setting up GCP project and services, setting up image builds with Cloudbuild, calculating test coverage, getting the model training on Vertex AI, updating the training script to integrate well with GCS.
 
-Student s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; he also implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using Weights & Biases. Finally, he implemented the FastAPI application for inference, along with the Gradio interface.
+s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using WandB; implemented the FastAPI application for inference, along with the Gradio interface.
 
-Student s237248 was in charge of the image classification model selection and implementation using torchvision, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with the Compute Engine, which was completed together with groupmembers, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the groupmembers, but contributed equally in terms of time spent.
+s237248 was in charge of the image classification model selection and implementation using torchvision, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with GCE, which was completed together with group members, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the group members, but contributed equally in terms of time spent.
