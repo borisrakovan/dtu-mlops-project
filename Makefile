@@ -35,8 +35,11 @@ predict:
 visualize:
 	python dtu_mlops_project/visualization/visualize.py
 
+train-docker-gpu:
+	docker run -it --rm --user $(id -u):$(id -g) --env-file .env -v $(shell pwd):/usr/src/app --gpus all train:latest
+
 train-docker:
-	docker run -it --rm --env-file .env -v $(shell pwd):/usr/src/app train:latest
+	docker run -it --rm --user $(id -u):$(id -g) --env-file .env -v $(shell pwd):/usr/src/app train:latest
 
 test: venv
 	pytest tests/
