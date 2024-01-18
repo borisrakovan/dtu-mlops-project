@@ -103,6 +103,7 @@ def train_model(cfg):
     metric_dict = {**train_metrics, **test_metrics}
     logger.info(f"Metrics: {metric_dict}")
 
+    logger.info("Uploading model to GCS...")
     upload_to_gcs(cfg.bucket_name, ckpt_path, cfg.model_blob_name)
 
 
