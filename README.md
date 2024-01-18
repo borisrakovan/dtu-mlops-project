@@ -3,6 +3,7 @@ dtu_mlops_project
 
 Project repository of Group MLOps66 for course Machine Learning Operations @ DTU ([course website](https://skaftenicki.github.io/dtu_mlops/)). Group MLOps66 consists of Riccardo Miccini, Boris Rakovan, and Berend Schuit.
 
+
 # Project description
 
 1. **Project goal:**
@@ -19,8 +20,6 @@ Our aim is to design a DL model that is pre-trained on visual imagery data (e.g.
 
 ## Conda
 This project uses [conda](https://docs.conda.io/en/latest/) and [pip](https://pip.pypa.io/en/stable/) for package management.
-
-```bash
 
 To create a virtual environment and install the dependencies, run
 
@@ -74,6 +73,30 @@ To perform the initial dataset setup (this only needs to be run the first time),
 $ make setup-data
 ```
 
+
+# Docker
+Our project can be run in a Docker container. To build the Docker image, run
+
+```bash
+$ make build-image-train
+
+# or, if you wan to pull the image (you need to be authenticated to GCP)
+$ docker pull gcr.io/dtu-mlops-411420/train:latest
+```
+
+You can then run the container with
+
+```bash
+$ make train-docker
+```
+
+If you want to run the container with a GPU (for NVIDIA, follow the setup instruction [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)), run
+
+```bash
+$ make train-docker-gpu
+```
+
+
 # Local deployment
 The project can be deployed locally using FastAPI, and features an optional browser-based UI.
 Use any of the following commands:
@@ -87,8 +110,6 @@ $ make web-gui
 
 # instantiate both (use -j2 to run in parallel)
 $ make webapp -j2
-```
-
 ```
 
 
