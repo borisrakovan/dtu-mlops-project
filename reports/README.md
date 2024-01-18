@@ -180,7 +180,7 @@ pip install -r requirements_dev.txt # optional, for development/tests
 > *experiments.*
 > Answer:
 
---- question 5 fill here ---
+We based our project partially on the [cookiecutter-data-science/](https://drivendata.github.io/cookiecutter-data-science/), and partially on the [lightning-hydra-template](https://github.com/ashleve/lightning-hydra-template), resulting in a custom project structure. A detailed overview is provided in the root level [README.md](https://github.com/borisrakovan/dtu-mlops-project/blob/main/README.md) of the project. The core structure consists of the source code in dtu_mlops_project/, split into data/, models/ and visualiazation/. The main scripts, train_model.py and predict_model.py are located within models/. data/ contains the data downloading and pre-procesing scripts, the contents of visualization/ are self-explanatory. Most other directories and files are located in the root directory. An important feature of this repository is the configs/ directory which contains the instructions and settings for nearly all repository functionality, following Hydra's hierarchical config structure. The folders from the template which we did not use, we ended up deleting for clarity, folders which are used but are listed in the .gitignore, were made visible to the version control system by adding .gitkeep files in those directories (e.g. data/raw/).
 
 ### Question 6
 
@@ -249,8 +249,8 @@ We initially implemented a test for the entire training pipeline, but it was dee
 
 We strived to use the full extent of the git workflow, including branches and pull requests.
 Specifically, we handled the development of each feature in a separate branch, and merged it into the main branch using a pull request.
-Furthermore, we used the "review" feature of GitHub to review each other's code and discuss additional modifications before merging it into the main branch.
-An example scenario could be:
+Furthermore, we used the "review" feature of GitHub to review each other's code and discuss additional modifications before merging it into the main branch. Because we have at this moment not deployed an operational version of the repository, we refrained for using a dev branch. If the repository were used in production we would have implemented a dev branch in between the main branch and the (short-lived) feature branches, merging the feature branches with dev and only merging dev with main upon large relevant changes and after thorough testing.
+An example scenario in our collaborative workflow could be:
 1. Group member **A** is assigned the task of implementing wandb logging.
 2. **A** creates a new local branch `add-wandb` and starts implementing the feature.
 3. **A** pushes the changes to the remote branch.
@@ -273,7 +273,7 @@ An example scenario could be:
 >
 > Answer:
 
-We did use DVC to manage the data in our project. We added our trianing data to DVC, and versioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using DVC. We did not use the version control functionality of DVC, as we did not have different versions of the training data, but if this were a real evolving project it would be likely that the training data would increase or be modified in time, and then using DVC would allow to specify which version of the trainig data to use during training.
+We did use DVC to manage the data in our project. We added our trianing data to DVC, and versioned it. We stored the data in a Cloud Storge Bucket and access it in a docker container using DVC. We did not use the version control functionality of DVC, as we did not have different versions of the training data, but if this were a real evolving project it would be likely that the training data would increase or be modified in time, and then using DVC would allow to specify which version of the trainig data to use during training. DVC was however still a useful addition for accessing our training data on Cloud Storage from within the docker containers on the Virtual Machines.
 
 ### Question 11
 
@@ -290,6 +290,7 @@ We did use DVC to manage the data in our project. We added our trianing data to 
 > Answer:
 
 As part of our CI setup, we have set up unit testing using pytest, linting using ruff (also with pre-commit) in [ci.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/.github/workflows/ci.yml). Furthermore, in a different file, we automated docker image creation using [cloudbuild.yml](https://github.com/borisrakovan/dtu-mlops-project/blob/main/cloudbuild.yml). We have not implemented tests for different OSs or Python versions, because our aim is to use the repository for running experiments and deploying the model within docker containers featuring a predefined environment (Linux and Python 3.11). Therefore, there is no need to test it for other OSs. To speed up CI execution, we use the caching feature for our pip requirements; this prevents having to re-download the dependencies every time CI is called.
+
 
 ## Running code and tracking experiments
 
@@ -556,6 +557,6 @@ Furthermore, figuring out the exact requirements for the VM instance was also pa
 >
 > Answer:
 
-<TODO>
+<TODO Boris>
 Student s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; he also implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using Weights & Biases. Finally, he implemented the FastAPI application for inference, along with the Gradio interface.
-<TODO>
+Student s237248 was in charge of the image classification model selection and set-up, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with the Compute Engine, which was completed together with groupmembers, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the groupmembers, but contributed equally in terms of time spent.
