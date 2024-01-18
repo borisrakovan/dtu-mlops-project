@@ -39,7 +39,14 @@ train-docker-gpu:
 	docker run -it --rm --user $(id -u):$(id -g) --env-file .env -v $(shell pwd):/usr/src/app --gpus all train:latest
 
 train-docker:
-	docker run -it --rm --user $(id -u):$(id -g) --env-file .env -v $(shell pwd):/usr/src/app train:latest
+	@GOOGLE_APPLICATION_CREDENTIALS=$$(grep GOOGLE_APPLICATION_CREDENTIALS .gc-credentials.env | cut -d '=' -f2) ; \
+	docker run -it --rm \
+		--user $(id -u):$(id -g) \
+		--env-file .env \
+		-e GOOGLE_APPLICATION_CREDENTIALS=/credentials.json \
+		-v $$GOOGLE_APPLICATION_CREDENTIALS:/credentials.json:ro \
+		-v $(shell pwd):/usr/src/app \
+		train:latest
 
 test: venv
 	pytest tests/
