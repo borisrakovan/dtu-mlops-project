@@ -3,13 +3,14 @@
 defaults:
   - datamodule: speechcmd
   - model: resnet50
-  - predict: forward
+  - predict: default
   - _self_
 
 seed: 42
 idx_to_class: "data/processed/class_idx_export.npy"
 api_port: 8001
 ui_port: 8002
+bucket_name: dtu_mlops_project_data
 
 hydra:
   job:

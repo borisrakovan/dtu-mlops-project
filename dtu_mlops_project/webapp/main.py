@@ -9,9 +9,12 @@ from fastapi.responses import PlainTextResponse
 from dtu_mlops_project.constants import PROJECT_ROOT
 from dtu_mlops_project.webapp.config import api_configs
 from dtu_mlops_project.models.predict_model import get_ppm_from_config
+from dtu_mlops_project.models.download_models import download_model
 
 os.chdir(PROJECT_ROOT)
 app = FastAPI()
+if not os.path.exists(api_configs.predict.filepath_model_checkpoint):
+    download_model(api_configs.bucket_name, api_configs.predict.filepath_model_checkpoint)
 ppm = get_ppm_from_config(api_configs)
 idx_to_class = np.load(api_configs.idx_to_class).astype(str)
 

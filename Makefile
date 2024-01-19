@@ -12,6 +12,9 @@ venv:
 build-image-train:
 	docker build -t train:latest -f docker/train.dockerfile .
 
+build-image-deploy:
+	docker build -t deploy:latest -f docker/deploy.dockerfile .
+
 lint: venv
 	ruff .
 
@@ -71,3 +74,21 @@ web-gui: venv
 	python dtu_mlops_project/webapp/gui.py
 
 webapp: venv web-api web-gui
+
+web-api-docker:
+	@GOOGLE_APPLICATION_CREDENTIALS=$$(grep GOOGLE_APPLICATION_CREDENTIALS .gc-credentials.env | cut -d '=' -f2) ; \
+	docker run -it --rm \
+		--env-file .env \
+		-e GOOGLE_APPLICATION_CREDENTIALS=/credentials.json \
+		-v $$GOOGLE_APPLICATION_CREDENTIALS:/credentials.json:ro \
+		-p 8001:8001 \
+		deploy:latest
+
+web-api-cloud:
+	gcloud run deploy model-deploy \
+		--image gcr.io/dtu-mlops-411420/deploy:latest \
+		--platform managed \
+		--region europe-west1 \
+		--allow-unauthenticated \
+		--port 8001 \
+		--cpu 2000m --memory 8Gi

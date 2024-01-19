@@ -20,6 +20,9 @@ WORKDIR /usr/src/app
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -e . --no-cache-dir
 
-COPY data/ /usr/src/app/data/
+COPY data/processed/class_idx_export.npy /usr/src/app/data/processed/class_idx_export.npy
 
-ENTRYPOINT ["python",  "-u", "dtu_mlops_project/models/train_model.py"]
+EXPOSE 8001
+RUN mkdir -p /usr/src/app/models
+
+ENTRYPOINT ["python", "-u", "dtu_mlops_project/webapp/main.py"]
