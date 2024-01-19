@@ -35,3 +35,7 @@ steps:
       - "gcr.io/dtu-mlops-411420/deploy:latest"
       - "--region"
       - "europe-west1"
+      - "cpu"
+      - "2000m"
+      - "memory"
+      - "8Gi"
