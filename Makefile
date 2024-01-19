@@ -83,3 +83,12 @@ web-api-docker:
 		-v $$GOOGLE_APPLICATION_CREDENTIALS:/credentials.json:ro \
 		-p 8001:8001 \
 		deploy:latest
+
+web-api-cloud:
+	gcloud run deploy model-deploy \
+		--image gcr.io/dtu-mlops-411420/deploy:latest \
+		--platform managed \
+		--region europe-west1 \
+		--allow-unauthenticated \
+		--port 8001 \
+		--cpu 2000m --memory 8Gi
