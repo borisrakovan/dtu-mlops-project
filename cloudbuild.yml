@@ -1,19 +1,37 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'gcr.io/dtu-mlops-411420/train:latest', '-f', 'docker/train.dockerfile', '.' ]
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push', 'gcr.io/dtu-mlops-411420/train:latest' ]
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build', '-t', 'gcr.io/dtu-mlops-411420/deploy:latest', '-f', 'docker/deploy.dockerfile', '.' ]
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push', 'gcr.io/dtu-mlops-411420/deploy:latest' ]
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/dtu-mlops-411420/train:latest",
+        "-f",
+        "docker/train.dockerfile",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/dtu-mlops-411420/train:latest"]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/dtu-mlops-411420/deploy:latest",
+        "-f",
+        "docker/deploy.dockerfile",
+        "--cache-from",
+        "gcr.io/dtu-mlops-411420/train:latest",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/dtu-mlops-411420/deploy:latest"]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
-    - 'run'
-    - 'deploy'
-    - 'model_deploy'
-    - '--image'
-    - 'gcr.io/dtu-mlops-411420/deploy:latest'
-    - '--region'
-    - 'europe-west1-b'
+      - "run"
+      - "deploy"
+      - "model-deploy"
+      - "--image"
+      - "gcr.io/dtu-mlops-411420/deploy:latest"
+      - "--region"
+      - "europe-west1"
