@@ -12,7 +12,6 @@ ENV PYTHONUNBUFFERED=1 \
 COPY requirements.txt /usr/src/app/requirements.txt
 COPY pyproject.toml /usr/src/app/pyproject.toml
 COPY dtu_mlops_project /usr/src/app/dtu_mlops_project
-COPY data/ /usr/src/app/data/
 COPY configs/ /usr/src/app/configs/
 
 # Set the working directory in the container
@@ -20,5 +19,7 @@ WORKDIR /usr/src/app
 
 RUN pip install -r requirements.txt --no-cache-dir
 RUN pip install -e . --no-cache-dir
+
+COPY data/ /usr/src/app/data/
 
 ENTRYPOINT ["python",  "-u", "dtu_mlops_project/models/train_model.py"]
