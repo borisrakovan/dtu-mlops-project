@@ -7,3 +7,13 @@ steps:
     args: [ 'build', '-t', 'gcr.io/dtu-mlops-411420/deploy:latest', '-f', 'docker/deploy.dockerfile', '.' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push', 'gcr.io/dtu-mlops-411420/deploy:latest' ]
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+    - 'run'
+    - 'deploy'
+    - 'model_deploy'
+    - '--image'
+    - 'gcr.io/dtu-mlops-411420/deploy:latest'
+    - '--region'
+    - 'europe-west1-b'
