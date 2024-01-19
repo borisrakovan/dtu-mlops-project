@@ -81,7 +81,7 @@ end of the project.
 * [x] Get your model training in GCP using either the Engine or Vertex AI
 * [x] Create a FastAPI application that can do inference using your model
 * [ ] If applicable, consider deploying the model locally using torchserve
-* [ ] Deploy your model in GCP using either Functions or Run as the backend
+* [X] Deploy your model in GCP using either Functions or Run as the backend
 
 ### Week 3
 
@@ -94,7 +94,7 @@ end of the project.
 
 ### Additional
 
-* [ ] Revisit your initial project description. Did the project turn out as you wanted?
+* [X] Revisit your initial project description. Did the project turn out as you wanted?
 * [x] Make sure all group members have a understanding about all parts of the project
 * [x] Uploaded all your code to github
 
@@ -523,7 +523,11 @@ The most expensive service was GCS due to the volume of data we had to store the
 >
 > Answer:
 
---- question 25 fill here ---
+![Project overview](figures/dtu-mlops-project-group66-overview.png)
+
+The starting point of the diagram is our local developement setup. We use conda together with pip to install our dependencies and we work with the collaborative worksflow as described in A9, using feature branches. We have set up our model configuration, and hyperparameter management using pytorch lightning combined with hydra, using the lightning-hydra-template discussed in question 5. We log our experiments using Weights & Biases, which works both locally and in the cloud. We have integrated precommit and a CI workflow, to do automated tests, linting and docker image deployment to the Container Registry using Cloud Build. We use this docker image in Vertex AI together with the code to train the ML models to perform the training in the cloud (which we earlier did locally, and then manually on a Compute Engine Virtual Machine, before moving to Vertex AI). The data used for training is stored in Cloud Storage and version controlled using dvc, we also use dvc to pull in the trainingdata when running the docker image in the cloud. The data itself is the torchaudio.datasets.SPEECHCOMMANDS dataset, wive consists of a large number of waveform files. We preprocessed the waveforms to spectrograms in order to be able to treat the problem as an image classification and used a ResNet50 for classification into one of 35 classes/words. We store our trained model in Cloud Storage in a different directory of the same bucket as the trainingdata, where it can be conveniently called during inference and/or deployment. The hyperparameter settings and training logs of the final model can be accessed in Weights & Biases. We deploy the final model operationally from the cloud using FastAPI. A user can go the UI via url and upload an audiofile, our application then returns the classification based on the audio file. A user can also clone or fork our public repository, to validate or modify any of the components of MLOps pipeline.
+
+
 
 ### Question 26
 
@@ -567,4 +571,4 @@ s240506 was in charge of creating a git repository, adding and customizing cooki
 
 s137345 was in charge of setting up the data pipeline, including download, preprocessing and augmentation, and versioning using DVC; implemented the initial training pipeline, consisting of training loop, integration with Hydra, Pytorch Lightning, and logging using WandB; implemented the FastAPI application for inference, along with the Gradio interface.
 
-s237248 was in charge of the image classification model selection and implementation using torchvision, prediction/inference script and prediction visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with GCE, which was completed together with group members, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the group members, but contributed equally in terms of time spent.
+Student s237248 was in charge of the initial project description, the image classification model selection and implementation using torchvision, the prediction/inference script and prediction & visualization scripts, and wrote large parts of the report. He was responsible for the Cloud-based training with the GCE, which was completed together with group members, and contributed to and/or tested/verified several other components of the projects. He had less prior experience with many of the concepts introduced in the course compared to the group members, but contributed equally in terms of time spent.
